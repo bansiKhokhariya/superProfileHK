@@ -10,7 +10,7 @@ const razorpay = new Razorpay({
 });
 
 // Handler for GET requests to fetch product by _id
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
 
     const body = await req.json();
 

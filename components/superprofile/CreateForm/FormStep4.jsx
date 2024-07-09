@@ -12,11 +12,19 @@ const FormStep4 = ({ formData, setFormData, onFormDataChange }) => {
     }, [formData, onFormDataChange]);
 
     const handleInputChange = (e) => {
-        const { id, value } = e.target;
-        setFormData({
-            ...formData,
-            [id]: value,
-        });
+        const { id, value, type, checked } = e.target;
+        // Handle different input types
+        if (type === 'checkbox') {
+            setFormData({
+                ...formData,
+                [id]: checked,
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [id]: value,
+            });
+        }
     };
 
     const handleFileChange = (e) => {
@@ -131,6 +139,19 @@ const FormStep4 = ({ formData, setFormData, onFormDataChange }) => {
                             />
                         </div>
                     )}
+                </div>
+            </div>
+            <div className='w-full bg-gray-200 h-1'></div>
+            <div>
+                <div className="flex items-center">
+                    <input
+                        id="isDraft"
+                        type="checkbox"
+                        className="w-4 h-4 border-gray-300 rounded"
+                        checked={formData.isDraft ?? ''}
+                        onChange={handleInputChange}
+                    />
+                    <label htmlFor="isDraft" className="py-3 ms-2 text-sm">I have read and agree to the Terms and Conditions and Privacy Policy of SuperProfile</label>
                 </div>
             </div>
         </div>

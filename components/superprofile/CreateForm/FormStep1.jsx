@@ -1,8 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image'
+import isUrl from 'is-url';
 
-const FormStep1 = ({ errors, formData, setFormData, onFormDataChange }) => {
+const FormStep1 = ({ errors, formData, setFormData, onFormDataChange, setErrors }) => {
 
     const [link, setLink] = useState('');
     const [linkError, setLinkError] = useState(false);
@@ -34,6 +35,51 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange }) => {
                 [id]: value,
             });
         }
+        
+        const updatedErrors = { ...errors };
+
+        if (id === 'offerDiscountInput') {
+            const originalPrice = parseFloat(formData.priceInput);
+            const discountedPrice = parseFloat(value);
+            if (discountedPrice >= originalPrice) {
+                updatedErrors.offerDiscountInput = 'Discounted price should be less than price';
+            } else {
+                delete updatedErrors.offerDiscountInput;
+            }
+        }
+
+        if (id === 'priceInput' && formData.offerDiscountCheckbox) {
+            const discountedPrice = parseFloat(formData.offerDiscountInput);
+            const originalPrice = parseFloat(value);
+            if (discountedPrice >= originalPrice) {
+                updatedErrors.offerDiscountInput = 'Discounted price should be less than price';
+            } else {
+                delete updatedErrors.offerDiscountInput;
+            }
+        }
+
+        if (id === 'suggestPriceInput' && formData.suggestPriceCheckbox) {
+            const minimumPrice = parseFloat(formData.minimunInput);
+            const suggestedPrice = parseFloat(value);
+            if (suggestedPrice < minimumPrice) {
+                updatedErrors.suggestPriceInput = 'Suggested price cannot be less than minimum price';
+            } else {
+                delete updatedErrors.suggestPriceInput;
+            }
+        }
+
+        if (id === 'minimunInput' && formData.suggestPriceCheckbox) {
+            const discountedPrice = parseFloat(formData.suggestPriceInput);
+            const originalPrice = parseFloat(value);
+            if (discountedPrice < originalPrice) {
+                updatedErrors.suggestPriceInput = 'Suggested price cannot be less than minimum price';
+            } else {
+                delete updatedErrors.suggestPriceInput;
+            }
+        }
+
+        setErrors(updatedErrors);
+
     };
 
     const handleFileChange = (e) => {
@@ -60,22 +106,36 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange }) => {
         });
     };
 
-
     const handleLinkChange = (e) => {
-        setLink(e.target.value);
+        const newLink = e.target.value;
+        setLink(newLink);
+        if (linkError) {
+            validateLink(newLink);
+        }
+    };
+
+    const validateLink = (url) => {
+        if (!isUrl(url)) {
+            setLinkError('Enter a valid link');
+        } else {
+            setLinkError('');
+        }
     };
 
     const handleAddLink = () => {
-        if (link) {
-            const updatedFiles = formData.digitalFiles ? [...formData.digitalFiles, link] : [link];
-            setFormData({
-                ...formData,
-                digitalFiles: updatedFiles,
-            });
-            setLink('');
-            setLinkError(false);
+        if (!link) {
+            setLinkError('Enter a link to add');
         } else {
-            setLinkError(true);
+            validateLink(link);
+            if (!linkError && link) {
+                const updatedFiles = formData.digitalFiles ? [...formData.digitalFiles, link] : [link];
+                setFormData({
+                    ...formData,
+                    digitalFiles: updatedFiles,
+                });
+                setLink('');
+                setLinkError('');
+            }
         }
     };
 
@@ -113,12 +173,21 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange }) => {
                     <div>
                         <label htmlFor="website-admin" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Add Link</label>
                         <div className="flex">
-                            <input type="text" value={link} onChange={handleLinkChange} className="rounded-l-lg bg-gray-50 border text-gray-900 focus:outline-none focus:border-pink-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5" placeholder="Add link to your files" />
-                            <button onClick={handleAddLink} className="inline-flex items-center px-5 text-sm text-white bg-black rounded-r-lg">
+                            <input
+                                type="text"
+                                value={link}
+                                onChange={handleLinkChange}
+                                className="rounded-l-lg bg-gray-50 border text-gray-900 focus:outline-none focus:border-pink-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5"
+                                placeholder="Add link to your files"
+                            />
+                            <button
+                                onClick={handleAddLink}
+                                className="inline-flex items-center px-5 text-sm text-white bg-black rounded-r-lg"
+                            >
                                 Add
                             </button>
                         </div>
-                        {linkError ? <p className='text-xs text-red-500 mt-1'>Enter a link to add</p> : null}
+                        {linkError && <p className='text-xs text-red-500 mt-1'>{linkError}</p>}
                     </div>
                 </div>
                 {errors.digitalFiles && <p className="text-red-500 text-sm mt-1">{errors.digitalFiles}</p>}
@@ -164,7 +233,7 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange }) => {
                 {formData.pricingType == 'FixedPrice' && <div>
                     <div className="mt-4">
                         <label htmlFor="priceInput" className="block mb-2 text-sm font-medium">Price</label>
-                        <input type="text" id="priceInput" value={formData.priceInput ?? ''} onChange={handleInputChange} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="₹ &nbsp; 1" />
+                        <input type="number" id="priceInput" value={formData.priceInput ?? ''} onChange={handleInputChange} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="₹ &nbsp; 1" />
                         {errors.priceInput && <p className="text-red-500 text-sm mt-1">{errors.priceInput}</p>}
                     </div>
                     <div className="flex flex-col">
@@ -180,7 +249,7 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange }) => {
                         </div>
                         {formData.offerDiscountCheckbox && (
                             <>
-                                <input type="text" onChange={handleInputChange} id="offerDiscountInput" value={formData.offerDiscountInput ?? ''} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="₹ &nbsp; 1" />
+                                <input type="number" onChange={handleInputChange} id="offerDiscountInput" value={formData.offerDiscountInput ?? ''} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="₹ &nbsp; 1" />
                                 {errors.offerDiscountInput && <p className="text-red-500 text-sm mt-1">{errors.offerDiscountInput}</p>}
                             </>
                         )}
@@ -190,7 +259,7 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange }) => {
                 {formData.pricingType == 'CustomersDecidePrice' && <div>
                     <div className="mt-4">
                         <label htmlFor="minimunInput" className="block mb-2 text-sm font-medium">Minimum Price</label>
-                        <input type="text" id="minimunInput" value={formData.minimunInput ?? ''} onChange={handleInputChange} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="₹ &nbsp; 1" />
+                        <input type="number" id="minimunInput" value={formData.minimunInput ?? ''} onChange={handleInputChange} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="₹ &nbsp; 1" />
                         {errors.minimunInput && <p className="text-red-500 text-sm mt-1">{errors.minimunInput}</p>}
                     </div>
                     <div className="flex flex-col">
@@ -206,7 +275,7 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange }) => {
                         </div>
                         {formData.suggestPriceCheckbox && (
                             <>
-                                <input type="text" value={formData.suggestPriceInput ?? ''} id="suggestPriceInput" onChange={handleInputChange} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="₹ &nbsp; 1" />
+                                <input type="number" value={formData.suggestPriceInput ?? ''} id="suggestPriceInput" onChange={handleInputChange} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="₹ &nbsp; 1" />
                                 {errors.suggestPriceInput && <p className="text-red-500 text-sm mt-1">{errors.suggestPriceInput}</p>}
                             </>
                         )}
@@ -267,7 +336,7 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange }) => {
                                 {formData.productPolicyCheckbox && (
                                     <>
                                         <div className='flex gap-2'>
-                                            <input type="text" id="timePeriodInput" value={formData.timePeriodInput ?? ''} onChange={handleInputChange} className="w-1/2 border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="0" />
+                                            <input type="number" id="timePeriodInput" value={formData.timePeriodInput ?? ''} onChange={handleInputChange} className="w-1/2 border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="0" />
                                             <select onChange={handleInputChange} value={formData.timePeriodSelect ?? ''} id="timePeriodSelect" className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-pink-500 block w-full p-2.5 ">
                                                 <option value="hours">Hours</option>
                                                 <option value="days">Days</option>

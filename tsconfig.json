@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "components/superprofile/listData/Main.jsx", "components/superprofile/listData/TableView.jsx", "components/superprofile/listData/CardView.jsx", "app/create-payment-page/[id].jsx", "components/EditPaymentPopover.jsx"  ],
+, "components/superprofile/listData/Main.jsx", "components/superprofile/listData/TableView.jsx", "components/superprofile/listData/CardView.jsx", "app/create-payment-page/[id].jsx", "components/EditPaymentPopover.jsx", "components/Toast.jsx"  ],
   "exclude": [
     "node_modules"
   ]

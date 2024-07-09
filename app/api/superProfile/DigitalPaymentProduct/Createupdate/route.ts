@@ -6,11 +6,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const body = await req.json();
     try {
         await connectMongo();
-
-
-        console.log("bodyin api",body);
-        
-
         if (body._id) {
             // Update existing document
             const updatedProduct = await DigitalPaymentProduct.findByIdAndUpdate(body._id, body, { new: true });
@@ -47,7 +42,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
 // Handler for GET requests
 export async function GET(req: NextRequest, res: NextResponse) {
     try {
-
         await connectMongo();
         // Fetch all products
         const products = await DigitalPaymentProduct.find();
@@ -56,3 +50,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
         return NextResponse.json({ message: "An error occurred", error: error.message }, { status: 500 });
     }
 }
+
+
+

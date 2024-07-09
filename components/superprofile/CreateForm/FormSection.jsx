@@ -4,8 +4,10 @@ import FormStep1 from './FormStep1'
 import FormStep2 from './FormStep2'
 import FormStep3 from './FormStep3'
 import FormStep4 from './FormStep4'
+import { useRouter } from 'next/navigation'
 
 const FormSection = ({ showPreview, setShowPreview, formData, setFormData, productId }) => {
+  const router = useRouter();
 
   const [errors, setErrors] = useState({})
   const [stepPage, setStepPage] = useState(1); // Track the current step
@@ -101,7 +103,6 @@ const FormSection = ({ showPreview, setShowPreview, formData, setFormData, produ
   }
 
   const handlePublishChanges = async () => {
-    console.log("formData final publish =========================>", formData);
 
     try {
       const response = await fetch('/api/superProfile/DigitalPaymentProduct/Createupdate', {
@@ -111,19 +112,15 @@ const FormSection = ({ showPreview, setShowPreview, formData, setFormData, produ
         },
         body: JSON.stringify(formData),
       });
-
       if (response.ok) {
-        const data = await response.json();
-        console.log('Success:', data);
-        // Handle success, e.g., show a success message, redirect, etc.
+         await response.json();
+        router.push(`/`);
       } else {
         const errorData = await response.json();
         console.error('Error:', errorData);
-        // Handle error, e.g., show an error message
       }
     } catch (error) {
       console.error('Error:', error);
-      // Handle error, e.g., show an error message
     }
   };
 
@@ -156,7 +153,7 @@ const FormSection = ({ showPreview, setShowPreview, formData, setFormData, produ
 
       <div className='p-8 flex flex-col gap-4 bg-white overflow-y-scroll ' style={{ height: "85dvh" }}>
         <p className='text-gray-500 text-sm'>Step {stepPage} of 4</p>
-        {stepPage === 1 && <FormStep1 formData={formData} setFormData={setFormData} errors={errors} onFormDataChange={handleFormDataChange} />}
+        {stepPage === 1 && <FormStep1 formData={formData} setErrors={setErrors} setFormData={setFormData} errors={errors} onFormDataChange={handleFormDataChange} />}
         {stepPage === 2 && <FormStep2 formData={formData} setFormData={setFormData} errors={errors} onFormDataChange={handleFormDataChange} />}
         {stepPage === 3 && <FormStep3 formData={formData} setFormData={setFormData} errors={errors} onFormDataChange={handleFormDataChange} />}
         {stepPage === 4 && <FormStep4 formData={formData} setFormData={setFormData} errors={errors} onFormDataChange={handleFormDataChange} />}

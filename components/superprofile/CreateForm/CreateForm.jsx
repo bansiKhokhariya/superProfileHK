@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import FormSection from '@/components/superprofile/CreateForm/FormSection';
 import PreviewSection from './PreviewSection';
-import axios from 'axios'
 
 const CreateForm = ({ productId }) => {
     const [showPreview, setShowPreview] = useState(false);
     const [formData, setFormData] = useState({
-
+        paymentEnable: true,
+        isPublish: true,
+        isDraft: false,
     });
     const [loading, setLoading] = useState(true); // State to track loading state
     const previewBackgroundUrl = `/images/previewBackground.webp`;

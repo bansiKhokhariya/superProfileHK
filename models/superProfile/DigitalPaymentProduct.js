@@ -24,7 +24,7 @@ const DigitalPaymentProductSchema = new mongoose.Schema({
     faqsViewToggle: { type: Boolean },
     testimonialsViewToggle: { type: Boolean },
     socialLinksViewToggle: { type: Boolean },
-    faqs: {type: Object},
+    faqs: { type: Object },
     testimonials: { type: Object },
     socialLinks: { type: Object },
     supportEmail: { type: String },
@@ -35,8 +35,12 @@ const DigitalPaymentProductSchema = new mongoose.Schema({
     color: { type: String },
     paymentPagePhone: { type: String },
     paymentPageEmail: { type: String },
-    paymentEnable: { type: Boolean },
+    paymentEnable: { type: Boolean},
+    isDraft: { type: Boolean },
     description: { type: String },
+    isPublish: { type: Boolean},
+    sale: { type: String },
+    revenue: { type: String },
 });
 
 const DigitalPaymentProduct = mongoose.models.DigitalPaymentProduct || mongoose.model('DigitalPaymentProduct', DigitalPaymentProductSchema);
