@@ -76,7 +76,7 @@ const CreateForm = ({ productId }) => {
                             style={{ backgroundImage: `url(${previewBackgroundUrl})` }}
                         ></div>
                         <div className='relative z-10 w-full'>
-                            <PreviewSection formData={formData} setFormData={setFormData} />
+                            <PreviewSection formData={formData} setFormData={setFormData} setShowPreview={setShowPreview}/>
                         </div>
                     </div>
                 </>

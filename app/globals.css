@@ -91,13 +91,15 @@ progress::-webkit-progress-value {
   border-radius: 50%;
 }
 
-.bansi{
-  height: 505px;
+.desktop-preview-container{
+  height: 515px;
   overflow: auto;
   scrollbar-width: none;
 }
 
 
-.paymentdiv{
-  margin-left: -200px;
+@media (max-width:500px) {
+  .desktop-preview-container{
+    height: 290px;
+  }
 }
