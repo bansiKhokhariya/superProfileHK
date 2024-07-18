@@ -2,7 +2,7 @@
 import React from 'react'
 import Image from 'next/image'
 
-const DesktopPreviewSection = ({ current, testimonials, formData, isVisibleTermsCondition, handleInputChange, discountPercentage, renderSocialIcon, handleNext, handlePrev, customAmountError, FaqItem, toggleVisibleTermsCondition }) => {
+const DesktopPreviewSection = ({ current, testimonials, formData, isVisibleTermsCondition, handleInputChange, discountPercentage, renderSocialIcon, handleNext, handlePrev, customAmountError, FaqItem, toggleVisibleTermsCondition  }) => {
 
     return (
         <div className='bg-black rounded-lg shadow-lg w-full max-w-[600px] h-[300px] md:h-[548px] md:max-w-[732px] '>

@@ -1,8 +1,12 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
+import PaymentPage from '@/components/superprofile/PaymentPage/PaymentPage'
 
 const Page = ({ params }) => {
     const [formData, setFormData] = useState({});
+    const [isVisibleTermsCondition, setIsVisibleTermsCondition] = useState(false);
+    const [current, setCurrent] = useState(0);
     const [customAmountError, setCustomAmountError] = useState('');
 
     const calculateDiscountPercentage = (originalPrice, discountedPrice) => {
@@ -49,107 +53,219 @@ const Page = ({ params }) => {
         }
     }, [params.productId]);
 
-    const handlePayment = async () => {
-        const amount = formData.pricingType === 'FixedPrice' ? discountedPrice || originalPrice : formData.customAmount;
+    const toggleVisibleTermsCondition = () => {
+        setIsVisibleTermsCondition(!isVisibleTermsCondition);
+    };
+
+    const FaqItem = ({ item }) => {
+        const accordion = useRef(null);
+        const [isOpen, setIsOpen] = useState(false);
+
+        return (
+            <li>
+                <button
+                    className="flex flex-col gap-1 w-full px-2 pt-2 pb-1 border rounded"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setIsOpen(!isOpen);
+                    }}
+                    aria-expanded={isOpen}
+                >
+                    <div className='flex items-center justify-between w-full'>
+                        <span
+                            className={`text-sm font-bold`}
+                        >
+                            {item?.question}
+                        </span>
+                        <svg
+                            className={`flex-shrink-0 w-2 h-2 ml-auto fill-current`}
+                            viewBox="0 0 16 16"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <rect
+                                y="7"
+                                width="16"
+                                height="2"
+                                rx="1"
+                                className={`transform origin-center transition duration-200 ease-out ${isOpen && "rotate-180"
+                                    }`}
+                            />
+                            <rect
+                                y="7"
+                                width="16"
+                                height="2"
+                                rx="1"
+                                className={`transform origin-center rotate-90 transition duration-200 ease-out ${isOpen && "rotate-180 hidden"
+                                    }`}
+                            />
+                        </svg>
+                    </div>
+                    <div
+                        ref={accordion}
+                        className={`transition-all duration-300 ease-in-out opacity-80 overflow-hidden`}
+                        style={
+                            isOpen
+                                ? { maxHeight: accordion?.current?.scrollHeight, opacity: 1 }
+                                : { maxHeight: 0, opacity: 0 }
+                        }
+                    >
+                        <div className="text-left text-xs mb-1">{item?.answer}</div>
+                    </div>
+
+                </button>
+            </li>
+        );
+    };
+
+    const testimonials = formData.testimonials;
+
+    const handlePrev = () => {
+        setCurrent(current === 0 ? testimonials.length - 1 : current - 1);
+    };
+
+    const handleNext = () => {
+        setCurrent(current === testimonials.length - 1 ? 0 : current + 1);
+    };
+
+    const renderSocialIcon = (platform) => {
+        switch (platform) {
+            case 'facebook':
+                return <Image src='/svg/facebook.svg' width={20} height={20} className='rounded' alt='facebook' />;
+            case 'twitter':
+                return <Image src='/svg/twitter.svg' width={20} height={20} className='rounded' alt='twitter' />;
+            case 'instagram':
+                return <Image src='/svg/instagram.svg' width={20} height={20} className='rounded' alt='instagram' />;
+            case 'linkedin':
+                return <Image src='/svg/linkedin.svg' width={20} height={20} className='rounded' alt='linkedin' />;
+            case 'youtube':
+                return <Image src='/svg/youtube.svg' width={20} height={20} className='rounded' alt='youtube' />;
+            case 'threads':
+                return <Image src='/svg/threads.svg' width={20} height={20} className='rounded' alt='threads' />;
+            case 'behance':
+                return <Image src='/svg/behance.svg' width={20} height={20} className='rounded' alt='behance' />;
+            case 'dribbble':
+                return <Image src='/svg/dribbble.svg' width={20} height={20} className='rounded' alt='dribbble' />;
+            case 'whatsapp':
+                return <Image src='/svg/whatsapp.svg' width={20} height={20} className='rounded' alt='whatsapp' />;
+            default:
+                return null; // Add more cases as needed
+        }
+    };
+
+    const [paymentPage, setPaymentPage] = useState(0)
+
+    const handlePaymentButton = () => {
+        if (paymentPage === 0) {
+            setPaymentPage(paymentPage + 1)
+        }
+        else {
+            if (formData.paymentPageEmail && formData.paymentPageName && formData.paymentPagePhone) {
+                makePayment();
+            } else {
+                alert('all fields are required')
+            }
+        }
+    }
+
+    const handleCloseButton = () => {
+        if (paymentPage !== 0) {
+            setPaymentPage(paymentPage - 1)
+        }
+    }
+
+    const makePayment = async () => {
+
+        const amount =
+            formData.pricingType === 'FixedPrice'
+                ? discountedPrice || originalPrice
+                : formData.customAmount;
 
         if (amount < formData.minimunInput) {
             setCustomAmountError(`Amount should be more than ${formData.minimunInput}`);
             return;
         }
 
-        try {
-            const response = await fetch('/api/razorpay/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ amount })
-            });
-            const { id: orderId } = await response.json();
 
-            const options = {
-                key: 'YOUR_RAZORPAY_KEY_ID', // Enter the Key ID generated from the Dashboard
-                amount: amount * 100, // Amount is in currency subunits. Default currency is INR. Hence, 1000 refers to 1000 paise
-                currency: "INR",
-                name: "Your Company Name",
-                description: "Test Transaction",
-                order_id: orderId, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder API call
-                handler: function (response) {
-                    alert(response.razorpay_payment_id);
-                    alert(response.razorpay_order_id);
-                    alert(response.razorpay_signature);
-                },
-                prefill: {
-                    name: "Your Name",
-                    email: "email@example.com",
-                    contact: "9999999999"
-                },
-                notes: {
-                    address: "Razorpay Corporate Office"
-                },
-                theme: {
-                    color: "#3399cc"
-                }
-            };
+        const res = await initializeRazorpay();
 
-            const rzp1 = new window.Razorpay(options);
-            rzp1.on('payment.failed', function (response) {
-                alert(response.error.code);
-                alert(response.error.description);
-                alert(response.error.source);
-                alert(response.error.step);
-                alert(response.error.reason);
-                alert(response.error.metadata.order_id);
-                alert(response.error.metadata.payment_id);
-            });
-            rzp1.open();
-        } catch (error) {
-            console.error('Error initiating Razorpay transaction:', error);
+        if (!res) {
+            alert("Razorpay SDK Failed to load");
+            return;
         }
+
+        // Make API call to the serverless API
+        const response = await fetch('/api/razorpay/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ amount: amount * 100 }) // Send amount in paisa
+        });
+        const data = await response.json();
+
+        var options = {
+            key: process.env.RAZORPAY_KEY, // Use NEXT_PUBLIC prefix for client-side env vars
+            name: "HKAPPS Product",
+            currency: data.currency,
+            amount: data.amount,
+            order_id: data.id,
+            description: "Thank you for your test donation",
+            image: "https://manuarora.in/logo.png",
+            handler: function (response) {
+                // Validate payment at server - using webhooks is a better idea.
+                alert(response.razorpay_payment_id);
+                alert(response.razorpay_order_id);
+                alert(response.razorpay_signature);
+            },
+            prefill: {
+                name: formData.paymentPageName,
+                email: formData.paymentPageEmail,
+                contact: formData.paymentPagePhone,
+            },
+        };
+
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
     };
 
+    const initializeRazorpay = () => {
+        return new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = "https://checkout.razorpay.com/v1/checkout.js";
+            // document.body.appendChild(script);
+            script.onload = () => {
+                resolve(true);
+            };
+            script.onerror = () => {
+                resolve(false);
+            };
+
+            document.body.appendChild(script);
+        });
+    };
+
+
     return (
-        <div className={`w-1/2 shadow-xl p-2`}>
-            <p className='font-bold text-[10px]'>
-                Payment Details
-            </p>
-            {formData.pricingType == 'CustomersDecidePrice' &&
-                <div>
-                    <label htmlFor="customAmount" className="mb-2 ">Custom Amount</label>
-                    <input onChange={handleInputChange} type="number" id="customAmount" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
-                    <p>{customAmountError && <p className="text-red-500 mt-1">{customAmountError}</p>}</p>
-                </div>
-            }
-            <div>
-                <label htmlFor="paymentPageEmail" className="mb-2">Your Email</label>
-                <input type="email" id="paymentPageEmail" onChange={handleInputChange} value={formData.paymentPageEmail || 'connect.easylifetools@gmail.com'} className="text-[8px] bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
-            </div>
-            <div>
-                <label htmlFor="paymentPagePhone" className="mb-2">Phone</label>
-                <input type="text" id="paymentPagePhone" onChange={handleInputChange} value={formData.paymentPagePhone || '9898398859'} className="text-[8px] bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
-            </div>
-            {formData.pricingType == 'FixedPrice' && <>
-                {formData.priceInput && <div className='mt-2'>
-                    <p className=''>Amount total</p>
-                    <div className='flex gap-1'>
-                        {formData.offerDiscountInput && <p className='text-bold'>₹{formData.offerDiscountInput}</p>}
-                        {!formData.offerDiscountInput ? <>{formData.priceInput && <p>₹{formData.priceInput}</p>}</> : <p><s>₹{formData.priceInput}</s></p>}
-                        <p>{discountPercentage !== null && <p className='text-green-600'>({discountPercentage}% off)</p>}</p>
-                    </div>
-                </div>}
-            </>}
-            {formData.pricingType == 'CustomersDecidePrice' && <>
-                {formData.minimunInput && <div className='mt-2'>
-                    <p className=''>Amount total</p>
-                    <div className='flex gap-1'>
-                        <p className='text-bold'>₹{formData.minimunInput}</p>
-                    </div>
-                </div>}
-            </>}
-            <div className='mt-2'>
-                <button onClick={handlePayment} style={{ background: formData.color }} className='text-white w-full rounded py-1 px-3 text-center'>{formData.buttonText ?? 'Make Payment ->'}</button>
-            </div>
-        </div>
+        <>
+            <PaymentPage
+                formData={formData}
+                handleInputChange={handleInputChange}
+                discountPercentage={discountPercentage}
+                renderSocialIcon={renderSocialIcon}
+                handleNext={handleNext}
+                handlePrev={handlePrev}
+                customAmountError={customAmountError}
+                FaqItem={FaqItem}
+                toggleVisibleTermsCondition={toggleVisibleTermsCondition}
+                isVisibleTermsCondition={isVisibleTermsCondition}
+                testimonials={testimonials}
+                current={current}
+                makePayment={makePayment}
+                paymentPage={paymentPage}
+                handlePaymentButton={handlePaymentButton}
+                handleCloseButton={handleCloseButton}
+            />
+        </>
     )
 }
 

@@ -35,6 +35,7 @@ const DigitalPaymentProductSchema = new mongoose.Schema({
     color: { type: String },
     paymentPagePhone: { type: String },
     paymentPageEmail: { type: String },
+    paymentPageName: { type: String },
     paymentEnable: { type: Boolean},
     isDraft: { type: Boolean },
     description: { type: String },

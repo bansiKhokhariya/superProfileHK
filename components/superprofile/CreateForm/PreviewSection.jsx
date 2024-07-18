@@ -148,13 +148,13 @@ const PreviewSection = ({ formData, setFormData, setShowPreview }) => {
                 <button className='text-xl font-extrabold text-white block lg:hidden' onClick={() => setShowPreview(false)}>✖</button>
                 <div className='flex p-1 gap-1 bg-gray-50 bg-opacity-20 rounded'>
                     <p
-                        className={`bg-white py-0.5 px-1 text-xs border rounded font-bold cursor-pointer ${isMobileView ? 'border-gray text-white bg-gray-500 ' : ''}`}
+                        className={`py-0.5 px-1 text-xs border rounded font-bold cursor-pointer ${isMobileView ? 'border-gray text-white bg-gray-500 ' : 'bg-white text-black'}`}
                         onClick={handleMobileClick}
                     >
                         Mobile
                     </p>
                     <p
-                        className={`bg-white py-0.5 px-1 text-xs border rounded font-bold cursor-pointer ${!isMobileView ? 'border-gray text-white bg-gray-500 ' : ''}`}
+                        className={`py-0.5 px-1 text-xs border rounded font-bold cursor-pointer ${!isMobileView ? 'border-gray text-white bg-gray-500 ' : 'bg-white text-black'}`}
                         onClick={handleDesktopClick}
                     >
                         Desktop
