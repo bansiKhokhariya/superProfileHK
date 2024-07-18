@@ -1,6 +1,7 @@
 'use client';
 import React from 'react'
 import Image from 'next/image'
+import { toast } from "react-hot-toast";
 
 const DesktopPreviewSection = ({ current, testimonials, formData, isVisibleTermsCondition, handleInputChange, discountPercentage, renderSocialIcon, handleNext, handlePrev, customAmountError, FaqItem, toggleVisibleTermsCondition  }) => {
 
@@ -172,7 +173,7 @@ const DesktopPreviewSection = ({ current, testimonials, formData, isVisibleTerms
                                 </div>}
                             </>}
                             <div className='mt-2'>
-                                <button style={{ background: formData.color }} onClick={() => { alert('easylifetools is not accepting payments at the moment') }} className='text-white w-full text-[8px] rounded py-1 px-3 text-center'>{formData.buttonText ?? 'Make Payment'}</button>
+                                <button style={{ background: formData.color }} onClick={() => {  toast.error('easylifetools is not accepting payments at the moment'); }} className='text-white w-full text-[8px] rounded py-1 px-3 text-center'>{formData.buttonText ?? 'Make Payment'}</button>
                             </div>
                         </div>
                     </div>

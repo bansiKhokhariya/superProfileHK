@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import PaymentPage from '@/components/superprofile/PaymentPage/PaymentPage'
+import { toast } from "react-hot-toast";
 
 const Page = ({ params }) => {
     const [formData, setFormData] = useState({});
@@ -159,11 +160,7 @@ const Page = ({ params }) => {
             setPaymentPage(paymentPage + 1)
         }
         else {
-            if (formData.paymentPageEmail && formData.paymentPageName && formData.paymentPagePhone) {
-                makePayment();
-            } else {
-                alert('all fields are required')
-            }
+            makePayment();
         }
     }
 
@@ -173,59 +170,65 @@ const Page = ({ params }) => {
         }
     }
 
+
     const makePayment = async () => {
 
-        const amount =
-            formData.pricingType === 'FixedPrice'
-                ? discountedPrice || originalPrice
-                : formData.customAmount;
+        if (!formData.paymentPageEmail && !formData.paymentPageName && !formData.paymentPagePhone) {
+            toast.error('all fields are required');
+        } else {
 
-        if (amount < formData.minimunInput) {
-            setCustomAmountError(`Amount should be more than ${formData.minimunInput}`);
-            return;
+            const amount =
+                formData.pricingType === 'FixedPrice'
+                    ? discountedPrice || originalPrice
+                    : formData.customAmount;
+
+            if (amount < formData.minimunInput) {
+                setCustomAmountError(`Amount should be more than ${formData.minimunInput}`);
+                return;
+            }
+
+
+            const res = await initializeRazorpay();
+
+            if (!res) {
+                toast.error('Razorpay SDK Failed to load');
+                return;
+            }
+
+            // Make API call to the serverless API
+            const response = await fetch('/api/razorpay/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ amount: amount * 100 }) // Send amount in paisa
+            });
+            const data = await response.json();
+
+            var options = {
+                key: process.env.RAZORPAY_KEY, // Use NEXT_PUBLIC prefix for client-side env vars
+                name: "HKAPPS Product",
+                currency: data.currency,
+                amount: data.amount,
+                order_id: data.id,
+                description: "Thank you for your test donation",
+                image: "https://hkapps.in/cdn/shop/files/Frame_30.png?v=1712860278&width=50",
+                handler: function (response) {
+                    // Validate payment at server - using webhooks is a better idea.
+                    console.log('razorpay_payment_id===>', response.razorpay_payment_id + 'razorpay_order_id====>', response.razorpay_order_id + 'razorpay_signature====>', response.razorpay_signature);
+                    toast.success("Payment has been successfully processed");
+                },
+                prefill: {
+                    name: formData.paymentPageName,
+                    email: formData.paymentPageEmail,
+                    contact: formData.paymentPagePhone,
+                },
+            };
+
+            const paymentObject = new window.Razorpay(options);
+            paymentObject.open();
         }
 
-
-        const res = await initializeRazorpay();
-
-        if (!res) {
-            alert("Razorpay SDK Failed to load");
-            return;
-        }
-
-        // Make API call to the serverless API
-        const response = await fetch('/api/razorpay/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ amount: amount * 100 }) // Send amount in paisa
-        });
-        const data = await response.json();
-
-        var options = {
-            key: process.env.RAZORPAY_KEY, // Use NEXT_PUBLIC prefix for client-side env vars
-            name: "HKAPPS Product",
-            currency: data.currency,
-            amount: data.amount,
-            order_id: data.id,
-            description: "Thank you for your test donation",
-            image: "https://manuarora.in/logo.png",
-            handler: function (response) {
-                // Validate payment at server - using webhooks is a better idea.
-                alert(response.razorpay_payment_id);
-                alert(response.razorpay_order_id);
-                alert(response.razorpay_signature);
-            },
-            prefill: {
-                name: formData.paymentPageName,
-                email: formData.paymentPageEmail,
-                contact: formData.paymentPagePhone,
-            },
-        };
-
-        const paymentObject = new window.Razorpay(options);
-        paymentObject.open();
     };
 
     const initializeRazorpay = () => {
@@ -243,7 +246,6 @@ const Page = ({ params }) => {
             document.body.appendChild(script);
         });
     };
-
 
     return (
         <>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
+import { toast } from "react-hot-toast";
 
 const MobilePreviewSection = ({ current, testimonials, formData, isVisibleTermsCondition, handleInputChange, discountPercentage, renderSocialIcon, handleNext, handlePrev, customAmountError, FaqItem, toggleVisibleTermsCondition }) => {
 
@@ -9,7 +10,7 @@ const MobilePreviewSection = ({ current, testimonials, formData, isVisibleTermsC
     if (paymentPage === 0) {
       setPaymentPage(paymentPage + 1)
     } else {
-      alert('easylifetools is not accepting payments at the moment')
+      toast.error('easylifetools is not accepting payments at the moment');
     }
   }
 

@@ -1,22 +1,18 @@
 import React, { useState } from 'react'
 import EditPaymentPopover from '@/components/EditPaymentPopover'
 import Image from 'next/image'
-import Toast from '../../Toast'
+import { toast } from "react-hot-toast";
 
 const TableView = ({ products, fetchProducts, handleShare }) => {
-
-    const [copySuccess, setCopySuccess] = useState('');
 
     const copyToClipboard = (productId) => {
         const link = `${window.location.origin}/vp/${productId}`;
         navigator.clipboard.writeText(link).then(function () {
-            setCopySuccess('copied to clipboard!');
+            toast.success("copied to clipboard!");
         }, function (err) {
-            console.error('Error copying text: ', err);
+            toast.error('Error copying text: ', err);
         });
     };
-
-
 
     return (
         <>
@@ -76,7 +72,6 @@ const TableView = ({ products, fetchProducts, handleShare }) => {
                                                             <path d="M15 9V4.6C15 4.26863 14.7314 4 14.4 4H4.6C4.26863 4 4 4.26863 4 4.6V14.4C4 14.7314 4.26863 15 4.6 15H9" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
                                                         </svg>
                                                     </button>
-                                                    {copySuccess && <Toast message={copySuccess} />}
                                                 </>
                                             }
                                             <div>
