@@ -1,7 +1,13 @@
 import React from 'react'
 import Image from 'next/image'
+import ButtonSignin from '@/components/ButtonSignin'
+import ButtonAccount from '@/components/ButtonAccount'
+import { useSession } from "next-auth/react";
 
-const PaymentPage = ({ handleCloseButton, handlePaymentButton, paymentPage, makePayment, current, testimonials, formData, isVisibleTermsCondition, handleInputChange, discountPercentage, renderSocialIcon, handleNext, handlePrev, customAmountError, FaqItem, toggleVisibleTermsCondition }) => {
+const PaymentPage = ({ paymentData, setProductViewPage, handleCloseButton, handlePaymentButton, paymentPage, makePayment, current, testimonials, formData, isVisibleTermsCondition, handleInputChange, discountPercentage, renderSocialIcon, handleNext, handlePrev, customAmountError, FaqItem, toggleVisibleTermsCondition }) => {
+
+    const { data: session } = useSession();
+
     return (
         <div>
             <div className='bg-black rounded-lg shadow-lg w-full hidden md:block'>
@@ -18,9 +24,15 @@ const PaymentPage = ({ handleCloseButton, handlePaymentButton, paymentPage, make
                                     <Image src={formData && formData.customizePageLogo && formData.customizePageLogo.preview || "/images/mainLogo.webp"} width={40} height={40} className='rounded-full h-12 w-12' alt='customizePageLogo' />
                                     <p className='text-sm'>{formData.customizePageTitle || 'easylifetools'}</p>
                                 </div>
+
                                 {formData.pagetitle &&
                                     <div className='mt-4'>
                                         <p className='font-bold text-lg'>{formData.pagetitle}</p>
+                                        {paymentData.payment && <>
+                                            <div className='mt-2 bg-green-50 border-l-4 border-green-400 pl-4 py-2 text-sm'>
+                                                <p className='font-bold'>Your last purchase was successful! &nbsp; <button className='text-blue-500 underline font-medium' onClick={() => { setProductViewPage(true) }}>view details </button></p>
+                                            </div>
+                                        </>}
                                         {formData.coverfiles &&
                                             <div className='mt-2'>
                                                 <Image src={formData.coverfiles.preview} height={500} width={500} className='rounded-md h-50 sm:h-50' alt='coverfiles' />
@@ -117,9 +129,7 @@ const PaymentPage = ({ handleCloseButton, handlePaymentButton, paymentPage, make
                     </div>
                     <div className='w-full md:w-1/3' style={{ background: formData.color }} >
                         <div className='flex justify-end p-3'>
-                            <div className='font-bold border p-2 h-10 w-10 rounded-full flex items-center justify-center text-sm text-black bg-white'>
-                                H
-                            </div>
+                            {session?.user ? <ButtonAccount /> : <ButtonSignin />}
                         </div>
                         <div className='p-2'>
                             <div className={` rounded-lg flex flex-col gap-3 w-full md:w-[300px] lg:w-[400px] border shadow-xl -ml-0 md:-ml-40 ${formData.theme == 'light' ? 'bg-white' : 'bg-black'} py-6 px-4`}>
@@ -188,6 +198,11 @@ const PaymentPage = ({ handleCloseButton, handlePaymentButton, paymentPage, make
                                     {formData.pagetitle &&
                                         <div>
                                             <p className='font-bold text-lg'>{formData.pagetitle}</p>
+                                            {paymentData.payment && <>
+                                                <div className='mt-2 bg-green-50 border-l-4 border-green-400 pl-4 py-2 text-sm'>
+                                                    <p className='font-bold'>Your last purchase was successful! &nbsp; <button className='text-blue-500 underline font-medium' onClick={() => { setProductViewPage(true) }}>view details </button></p>
+                                                </div>
+                                            </>}
                                             {formData.coverfiles &&
                                                 <div className='mt-2'>
                                                     <Image src={formData.coverfiles.preview} height={200} width={200} className='rounded-md h-80 w-full' alt='coverfiles' />

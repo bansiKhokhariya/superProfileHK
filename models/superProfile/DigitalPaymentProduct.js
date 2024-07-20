@@ -36,17 +36,19 @@ const DigitalPaymentProductSchema = new mongoose.Schema({
     paymentPagePhone: { type: String },
     paymentPageEmail: { type: String },
     paymentPageName: { type: String },
-    paymentEnable: { type: Boolean},
+    paymentEnable: { type: Boolean },
     isDraft: { type: Boolean },
     description: { type: String },
-    isPublish: { type: Boolean},
+    isPublish: { type: Boolean },
     sale: { type: String },
     revenue: { type: String },
+},{
+    timestamps: true,
 });
 
-const DigitalPaymentProduct = mongoose.models.DigitalPaymentProduct || mongoose.model('DigitalPaymentProduct', DigitalPaymentProductSchema);
 
-export default DigitalPaymentProduct;
+
+export default mongoose.models.DigitalPaymentProduct || mongoose.model('DigitalPaymentProduct', DigitalPaymentProductSchema);
 
 
 

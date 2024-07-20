@@ -2,7 +2,6 @@ import React from 'react'
 import EditPaymentPopover from '@/components/EditPaymentPopover'
 import Image from 'next/image'
 
-
 const CardView = ({ products, fetchProducts, handleShare }) => {
     return (
         <>
@@ -51,7 +50,7 @@ const CardView = ({ products, fetchProducts, handleShare }) => {
                                     <div className="py-2 text-gray-500 text-sm gap-2 flex flex-col">
                                         <div className="flex justify-between ">
                                             <p>Sale</p>
-                                            <p>0</p>
+                                            <p>{product.sale || 0}</p>
                                         </div>
                                         <div className="flex justify-between ">
                                             <p>Price</p>
@@ -59,7 +58,7 @@ const CardView = ({ products, fetchProducts, handleShare }) => {
                                         </div>
                                         <div className="flex justify-between ">
                                             <p>Revenue</p>
-                                            <p>0</p>
+                                            <p>{product.revenue || 0}</p>
                                         </div>
                                         <div className="flex justify-between ">
                                             <p>Payments &#128712;</p>

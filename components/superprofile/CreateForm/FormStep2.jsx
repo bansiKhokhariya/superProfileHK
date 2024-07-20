@@ -217,13 +217,11 @@ const FormStep2 = ({ formData, setFormData, errors, onFormDataChange }) => {
     uploadedFiles.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader.result.split(',')[1]; // Get the base64 string
         setFormData((prevFormData) => ({
           ...prevFormData,
           coverfiles: {
             name: file.name,
             type: file.type,
-            base64: base64String, // Save base64 string if needed
             preview: reader.result, // Save preview URL if needed
           },
         }));

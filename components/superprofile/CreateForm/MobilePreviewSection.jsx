@@ -180,7 +180,6 @@ const MobilePreviewSection = ({ current, testimonials, formData, isVisibleTermsC
           </div>
         </div>
       </div>
-
     </>
   )
 }

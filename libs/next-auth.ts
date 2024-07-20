@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import config from "@/config";
 import connectMongo from "./mongo";
@@ -28,16 +27,6 @@ export const authOptions: NextAuthOptionsExtended = {
         };
       },
     }),
-    // Follow the "Login with Email" tutorial to set up your email server
-    // Requires a MongoDB database. Set MONOGODB_URI env variable.
-    ...(connectMongo
-      ? [
-          EmailProvider({
-            server: process.env.EMAIL_SERVER,
-            from: config.mailgun.fromNoReply,
-          }),
-        ]
-      : []),
   ],
   // New users will be saved in Database (MongoDB Atlas). Each user (model) has some fields like name, email, image, etc..
   // Requires a MongoDB database. Set MONOGODB_URI env variable.
@@ -59,7 +48,7 @@ export const authOptions: NextAuthOptionsExtended = {
     brandColor: config.colors.main,
     // Add you own logo below. Recommended size is rectangle (i.e. 200x50px) and show your logo + name.
     // It will be used in the login flow to display your logo. If you don't add it, it will look faded.
-    logo: `https://${config.domainName}/logoAndName.png`,
+    logo: `https://lh3.googleusercontent.com/p/AF1QipOPltd9vNhmixxxG0hfiHjRZLib6wG0CTaj-3rQ=s680-w680-h510`,
   },
 };
 

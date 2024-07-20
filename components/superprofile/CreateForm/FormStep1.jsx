@@ -88,7 +88,6 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange, setErrors 
         uploadedFiles.forEach((file) => {
             const reader = new FileReader();
             reader.onloadend = () => {
-                const base64String = reader.result.split(',')[1];
                 setFormData((prevFormData) => ({
                     ...prevFormData,
                     digitalFiles: [
@@ -96,7 +95,6 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange, setErrors 
                         {
                             name: file.name,
                             type: file.type,
-                            base64: base64String,
                             preview: reader.result,
                         },
                     ],

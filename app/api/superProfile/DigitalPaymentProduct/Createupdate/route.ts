@@ -37,8 +37,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
 }
 
-
-
 // Handler for GET requests
 export async function GET(req: NextRequest, res: NextResponse) {
     try {

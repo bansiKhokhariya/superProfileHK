@@ -42,8 +42,8 @@ const TableView = ({ products, fetchProducts, handleShare }) => {
                                             </div>
                                         </td>
                                         <td className="p-4 text-sm">{product.offerDiscountInput || 0}</td>
-                                        <td className="p-4 text-sm">0</td>
-                                        <td className="p-4 text-sm">0</td>
+                                        <td className="p-4 text-sm">{product.sale || 0}</td>
+                                        <td className="p-4 text-sm">{product.revenue || 0}</td>
                                         <td className="p-4 text-sm">
                                             {product.isDraft ?
                                                 <>
