@@ -24,6 +24,31 @@ const Page = ({ params }) => {
     const [paymentProductId, setPaymentProductId] = useState()
     const [paymentData, setPaymentData] = useState('')
 
+    /* global fbq */
+    useEffect(() => {
+        // Initialize Facebook Pixel
+        !(function (f, b, e, v, n, t, s) {
+          if (f.fbq) return;
+          n = f.fbq = function () {
+            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+          };
+          if (!f._fbq) f._fbq = n;
+          n.push = n;
+          n.loaded = !0;
+          n.version = '2.0';
+          n.queue = [];
+          t = b.createElement(e);
+          t.async = !0;
+          t.src = v;
+          s = b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t, s);
+        })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '446057858329236');
+        fbq('track', 'PageView');
+      }, []);
+
+
+
     useEffect(() => {
         if (session?.user) {
             setFormData((prevData) => ({
@@ -109,7 +134,27 @@ const Page = ({ params }) => {
         }
     }
 
+    const callFacebookEvent = () => {
+        const eventData = {
+            eventName: 'super',
+            message: 'A successful payment was made for the product',
+            additionalData: {
+                "product Name": formData.pagetitle,
+                "User Name": formData.paymentPageName,
+                "user Email": formData.paymentPageEmail,
+            }
+        };
+
+        try {
+            fbq('track', eventData.eventName, { message: eventData.message, additionalData: eventData.additionalData });
+            toast.success('Facebook event successfully called!');
+        } catch (error) {
+            toast.error('Failed to call Facebook event.');
+        }
+    };
+
     const makePayment = async () => {
+
         if (formData.limitQuantityInput) {
             try {
                 const response = await fetch(`/api/superProfile/payment/getbyUser?productId=${params.productId}`, {
@@ -172,6 +217,9 @@ const Page = ({ params }) => {
                     description: "Thank you for your test donation",
                     image: "https://hkapps.in/cdn/shop/files/Frame_30.png?v=1712860278&width=50",
                     handler: function (response) {
+
+                        callFacebookEvent()
+
                         const audienceData = {
                             name: formData.paymentPageName,
                             email: formData.paymentPageEmail,
