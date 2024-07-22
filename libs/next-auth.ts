@@ -14,6 +14,7 @@ export const authOptions: NextAuthOptionsExtended = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GoogleProvider({
+      allowDangerousEmailAccountLinking: true,
       // Follow the "Login with Google" tutorial to get your credentials
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,

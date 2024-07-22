@@ -63,10 +63,11 @@ const Page = ({ params }) => {
     const calculateDiscountPercentage = (originalPrice, discountedPrice) => {
         if (originalPrice && discountedPrice) {
             const discount = ((originalPrice - discountedPrice) / originalPrice) * 100;
-            return discount.toFixed(2); // Returns a string with 2 decimal places
+            return Math.floor(discount); // Returns an integer value
         }
         return null;
     };
+    
 
     const originalPrice = parseFloat(formData.priceInput);
     const discountedPrice = parseFloat(formData.offerDiscountInput);
