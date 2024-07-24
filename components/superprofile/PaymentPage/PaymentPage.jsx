@@ -5,10 +5,9 @@ import { usePathname } from 'next/navigation';
 
 const PaymentPage = ({ paymentData, setProductViewPage, handleCloseButton, handlePaymentButton, paymentPage, makePayment, current, testimonials, formData, isVisibleTermsCondition, handleInputChange, discountPercentage, renderSocialIcon, handleNext, handlePrev, customAmountError, FaqItem, toggleVisibleTermsCondition }) => {
     const pathname = usePathname()
-
     return (
         <div>
-            <div className='bg-black rounded-lg shadow-lg w-full hidden md:block' style={{ height: "100dvh" }}>
+            <div className='bg-black rounded-lg shadow-lg w-full hidden md:block'>
                 <div className='p-2 w-full' style={{ background: formData.color }}>
                     {!formData.paymentEnable && <>
                         <p className='text-center text-sm text-white'>⏳ Sale ended ⏳</p>
@@ -118,7 +117,7 @@ const PaymentPage = ({ paymentData, setProductViewPage, handleCloseButton, handl
                                 <div className='w-full bg-gray-200 h-0.5 mt-6'></div>
 
                                 <div className='mt-3'>
-                                    <Image src='https://superprofile.bio/_next/static/media/SuperProfile-dark.fc38e89a.svg' width={100} height={60} alt='superbaseprofile' />
+                                    <p className='font-bold text-xl'>HKAPPS</p>
                                     <p className='text-sm mt-1'> Want to create your own payment page? Experience hassle-free payouts and premium support. Get started now!</p>
                                 </div>
                             </div>
@@ -281,8 +280,8 @@ const PaymentPage = ({ paymentData, setProductViewPage, handleCloseButton, handl
                                     </div>
                                     <div className='w-full bg-gray-200 h-0.5'></div>
                                     <div>
-                                        <Image src='https://superprofile.bio/_next/static/media/SuperProfile-dark.fc38e89a.svg' width={120} height={80} alt='superbaseprofile' />
-                                        <p className='text-sm mt-1'> Want to create your own payment page? Experience hassle-free payouts and premium support. Get started now!</p>
+                                        <p className='font-bold text-xl'>HKAPPS</p>
+                                        <p className='text-sm mt-1'>Want to create your own payment page? Experience hassle-free payouts and premium support. Get started now!</p>
                                     </div>
                                 </div>
                                 :

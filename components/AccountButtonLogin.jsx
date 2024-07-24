@@ -37,10 +37,13 @@ const AccountButtonLogin = () => {
                         leaveFrom="transform scale-100 opacity-100"
                         leaveTo="transform scale-95 opacity-0"
                     >
-                        <Popover.Panel className="absolute z-10 mt-3 transform">
-                            <div className="rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 py-1  px-4 bg-white">
-                                <div className="space-y-2">
-                                    <button onClick={handleLogout} className="w-full text-left text-sm text-red-500">
+                        <Popover.Panel className="absolute right-0 z-10 mt-3 transform">
+                            <div className="overflow-hidden rounded-xl shadow-xl ring-1 ring-base-content ring-opacity-5 bg-base-100 p-1">
+                                <div className="space-y-0.5 text-sm">
+                                    <button
+                                        className="text-sm flex items-center gap-2 hover:bg-error/20 hover:text-error duration-200 py-1.5 px-4 w-full rounded-lg font-medium"
+                                        onClick={handleLogout}
+                                    >
                                         Logout
                                     </button>
                                 </div>

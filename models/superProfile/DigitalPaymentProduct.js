@@ -42,7 +42,9 @@ const DigitalPaymentProductSchema = new mongoose.Schema({
     isPublish: { type: Boolean },
     sale: { type: String },
     revenue: { type: String },
-},{
+    metaPixelId: { type: String },
+    metaEventName: { type: String },
+}, {
     timestamps: true,
 });
 
