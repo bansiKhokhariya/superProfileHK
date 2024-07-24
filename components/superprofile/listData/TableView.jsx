@@ -41,7 +41,13 @@ const TableView = ({ products, fetchProducts, handleShare }) => {
                                                 <span className="text-gray-800 text-sm mr-5">{product.pagetitle}</span>
                                             </div>
                                         </td>
-                                        <td className="p-4 text-sm">{product.offerDiscountInput || 0}</td>
+                                        <td className="p-4 text-sm">
+                                            {product.pricingType == "FixedPrice" ?
+                                                <p>{product.offerDiscountCheckbox ? product.offerDiscountInput || 0 : product.priceInput || 0}</p>
+                                                :
+                                                <p>{product.suggestPriceCheckbox ? product.suggestPriceInput || 0 : product.minimunInput || 0}</p>
+                                            }
+                                        </td>
                                         <td className="p-4 text-sm">{product.sale || 0}</td>
                                         <td className="p-4 text-sm">{product.revenue || 0}</td>
                                         <td className="p-4 text-sm">

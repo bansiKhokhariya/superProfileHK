@@ -14,7 +14,7 @@ const ViewProduct = ({ setProductViewPage, formData }) => {
     return (
         <>
             <div style={{ height: '100dvh' }}>
-                <button className='fixed top-0 bg-white py-8 px-20 border-b w-full text-left' onClick={() => { setProductViewPage(false) }}> {' <- back '}</button>
+                <button className='fixed top-0 bg-white py-8 px-20 border-b w-full text-left' onClick={() => { setProductViewPage(false), localStorage.removeItem('loginPaymentBox'); }}> {' <- back '}</button>
                 <div className='bg-gray-200 gap-4 flex py-8 px-20 w-full h-full mt-20'>
                     <div className='w-1/2 flex flex-col gap-4'>
                         <div className='bg-white border border-gray-300 rounded-lg'>

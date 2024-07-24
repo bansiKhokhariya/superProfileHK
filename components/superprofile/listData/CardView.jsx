@@ -54,7 +54,11 @@ const CardView = ({ products, fetchProducts, handleShare }) => {
                                         </div>
                                         <div className="flex justify-between ">
                                             <p>Price</p>
-                                            <p>{product.offerDiscountInput || 0}</p>
+                                            {product.pricingType == "FixedPrice" ?
+                                                <p>{product.offerDiscountCheckbox ? product.offerDiscountInput || 0 : product.priceInput || 0}</p>
+                                                :
+                                                <p>{product.suggestPriceCheckbox ? product.suggestPriceInput || 0 : product.minimunInput || 0}</p>
+                                            }
                                         </div>
                                         <div className="flex justify-between ">
                                             <p>Revenue</p>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import TableView from '@/components/superprofile/listData/TableView'
 import CardView from '@/components/superprofile/listData/CardView'
+import Login from '@/components/Login';
 
 const Main = () => {
     const [dataView, setDataView] = useState('card');
@@ -29,12 +30,12 @@ const Main = () => {
             const data = await response.json();
             setProducts(data.products);
 
-             // Calculate total sale and revenue
-             const saleSum = data.products.reduce((acc, product) => acc + parseFloat(product.sale || 0), 0);
-             const revenueSum = data.products.reduce((acc, product) => acc + parseFloat(product.revenue || 0), 0);
+            // Calculate total sale and revenue
+            const saleSum = data.products.reduce((acc, product) => acc + parseFloat(product.sale || 0), 0);
+            const revenueSum = data.products.reduce((acc, product) => acc + parseFloat(product.revenue || 0), 0);
 
-             setTotalSale(saleSum);
-             setTotalRevenue(revenueSum);
+            setTotalSale(saleSum);
+            setTotalRevenue(revenueSum);
 
             // Calculate counts
             const publishedCount = data.products.filter(product => product.isPublish === true && product.isDraft === true).length;

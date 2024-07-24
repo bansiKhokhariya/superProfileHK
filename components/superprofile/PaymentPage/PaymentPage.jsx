@@ -1,16 +1,14 @@
 import React from 'react'
 import Image from 'next/image'
-import ButtonSignin from '@/components/ButtonSignin'
-import ButtonAccount from '@/components/ButtonAccount'
-import { useSession } from "next-auth/react";
+import Login from '@/components/Login';
+import { usePathname } from 'next/navigation';
 
 const PaymentPage = ({ paymentData, setProductViewPage, handleCloseButton, handlePaymentButton, paymentPage, makePayment, current, testimonials, formData, isVisibleTermsCondition, handleInputChange, discountPercentage, renderSocialIcon, handleNext, handlePrev, customAmountError, FaqItem, toggleVisibleTermsCondition }) => {
-
-    const { data: session } = useSession();
+    const pathname = usePathname()
 
     return (
         <div>
-            <div className='bg-black rounded-lg shadow-lg w-full hidden md:block'>
+            <div className='bg-black rounded-lg shadow-lg w-full hidden md:block' style={{ height: "100dvh" }}>
                 <div className='p-2 w-full' style={{ background: formData.color }}>
                     {!formData.paymentEnable && <>
                         <p className='text-center text-sm text-white'>⏳ Sale ended ⏳</p>
@@ -76,7 +74,6 @@ const PaymentPage = ({ paymentData, setProductViewPage, handleCloseButton, handl
                                         ))}
                                     </ul>
                                 </div>}
-
                                 {formData.testimonialsViewToggle && formData.testimonials &&
                                     <>
                                         <p className='font-bold mt-4 text-sm'>
@@ -129,7 +126,7 @@ const PaymentPage = ({ paymentData, setProductViewPage, handleCloseButton, handl
                     </div>
                     <div className='w-full md:w-1/3' style={{ background: formData.color }} >
                         <div className='flex justify-end p-3'>
-                            {session?.user ? <ButtonAccount /> : <ButtonSignin />}
+                            <Login redirectUrl={pathname} />
                         </div>
                         <div className='p-2'>
                             <div className={` rounded-lg flex flex-col gap-3 w-full md:w-[300px] lg:w-[400px] border shadow-xl -ml-0 md:-ml-40 ${formData.theme == 'light' ? 'bg-white' : 'bg-black'} py-6 px-4`}>
@@ -141,18 +138,18 @@ const PaymentPage = ({ paymentData, setProductViewPage, handleCloseButton, handl
                                         {customAmountError && <p className="text-red-500 text-xs mt-1">{customAmountError}</p>}
                                     </div>
                                 }
-                                <div>
+                                {/* <div>
                                     <label htmlFor="paymentPageName" className="text-sm">Your Name</label>
                                     <input type="text" id="paymentPageName" onChange={handleInputChange} value={formData.paymentPageName || ''} className="text-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
-                                </div>
+                                </div> */}
                                 <div>
                                     <label htmlFor="paymentPageEmail" className="text-sm">Your Email</label>
                                     <input type="email" id="paymentPageEmail" onChange={handleInputChange} value={formData.paymentPageEmail || ''} className="text-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
                                 </div>
-                                <div>
+                                {/* <div>
                                     <label htmlFor="paymentPagePhone" className="text-sm">Phone</label>
                                     <input type="text" id="paymentPagePhone" onChange={handleInputChange} value={formData.paymentPagePhone || ''} className="text-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
-                                </div>
+                                </div> */}
                                 {formData.pricingType == 'FixedPrice' && <>
                                     {formData.priceInput && <div className='mt-2'>
                                         <p className='text-sm'>Amount total</p>
@@ -301,18 +298,18 @@ const PaymentPage = ({ paymentData, setProductViewPage, handleCloseButton, handl
                                             {customAmountError && <p className="text-red-500 text-[8px] mt-1">{customAmountError}</p>}
                                         </div>
                                     }
-                                    <div>
+                                    {/* <div>
                                         <label htmlFor="paymentPageName" className="text-sm">Your Name</label>
                                         <input type="text" id="paymentPageName" onChange={handleInputChange} value={formData.paymentPageName || ''} className="text-xs bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
-                                    </div>
+                                    </div> */}
                                     <div>
                                         <label htmlFor="paymentPageEmail" className="text-sm">Your Email</label>
                                         <input type="email" id="paymentPageEmail" onChange={handleInputChange} value={formData.paymentPageEmail || ''} className="text-xs bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <label htmlFor="paymentPagePhone" className="text-sm">Phone</label>
                                         <input type="text" id="paymentPagePhone" onChange={handleInputChange} value={formData.paymentPagePhone || ''} className="text-xs bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
-                                    </div>
+                                    </div> */}
                                 </div>
                             }
                         </div>

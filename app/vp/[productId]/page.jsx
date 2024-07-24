@@ -3,17 +3,14 @@ import React, { useState, useEffect } from 'react'
 import PaymentPage from '@/components/superprofile/PaymentPage/PaymentPage'
 import ViewProduct from '@/components/superprofile/PaymentPage/ViewProduct'
 import SuccessPaymentBox from '@/components/superprofile/PaymentPage/SuccessPaymentBox'
-import { useSession } from "next-auth/react";
 import toast from 'react-hot-toast'
 import FaqItem from '@/components/superprofile/PaymentPage/FaqItem';
 import renderSocialIcon from '@/utils/renderSocialIcon';
+import { magic } from '@/libs/magic';
 
 const Page = ({ params }) => {
-    const { data: session } = useSession();
     const [formData, setFormData] = useState({
-        paymentPageName: '',
         paymentPageEmail: '',
-        paymentPagePhone: ''
     });
     const [isVisibleTermsCondition, setIsVisibleTermsCondition] = useState(false);
     const [current, setCurrent] = useState(0);
@@ -28,46 +25,53 @@ const Page = ({ params }) => {
     useEffect(() => {
         // Initialize Facebook Pixel
         !(function (f, b, e, v, n, t, s) {
-          if (f.fbq) return;
-          n = f.fbq = function () {
-            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-          };
-          if (!f._fbq) f._fbq = n;
-          n.push = n;
-          n.loaded = !0;
-          n.version = '2.0';
-          n.queue = [];
-          t = b.createElement(e);
-          t.async = !0;
-          t.src = v;
-          s = b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t, s);
+            if (f.fbq) return;
+            n = f.fbq = function () {
+                n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s);
         })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '446057858329236');
         fbq('track', 'PageView');
-      }, []);
+    }, []);
 
 
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        if (session?.user) {
+        magic.user.isLoggedIn().then((isLoggedIn) => {
+            if (isLoggedIn) {
+                magic.user.getMetadata().then(setUser);
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        if (user) {
             setFormData((prevData) => ({
                 ...prevData,
-                paymentPageName: session.user.name || '',
-                paymentPageEmail: session.user.email || '',
-                paymentPagePhone: session?.user?.phone || '',
+                paymentPageEmail: user.email || '',
             }));
         }
-    }, [session?.user]);
+    }, [user]);
 
     const calculateDiscountPercentage = (originalPrice, discountedPrice) => {
         if (originalPrice && discountedPrice) {
             const discount = ((originalPrice - discountedPrice) / originalPrice) * 100;
-            return Math.floor(discount); // Returns an integer value
+            return Math.floor(discount);
         }
         return null;
     };
-    
+
 
     const originalPrice = parseFloat(formData.priceInput);
     const discountedPrice = parseFloat(formData.offerDiscountInput);
@@ -179,7 +183,7 @@ const Page = ({ params }) => {
         }
 
         async function nestedFunction() {
-            if (!formData.paymentPageEmail || !formData.paymentPageName || !formData.paymentPagePhone) {
+            if (!formData.paymentPageEmail) {
                 toast.error('all fields are required');
             } else {
                 const amount =
@@ -224,7 +228,7 @@ const Page = ({ params }) => {
                         const audienceData = {
                             name: formData.paymentPageName,
                             email: formData.paymentPageEmail,
-                            phone: formData.paymentPagePhone
+                            // phone: formData.paymentPagePhone
                         }
                         const paymentDetails = {
                             amount: amount,
@@ -250,7 +254,7 @@ const Page = ({ params }) => {
                     prefill: {
                         name: formData.paymentPageName,
                         email: formData.paymentPageEmail,
-                        contact: formData.paymentPagePhone,
+                        // contact: formData.paymentPagePhone,
                     },
                 };
 
@@ -297,10 +301,13 @@ const Page = ({ params }) => {
                 console.error('Error fetching payment data:', error);
             }
         };
-        if (session?.user?.email) {
-            fetchPaymentData(session.user.email);
+        if (user?.email) {
+            fetchPaymentData(user.email);
         }
-    }, [session?.user?.email]);
+    }, [user?.email]);
+
+
+    console.log("userData", user);
 
     return (
         <>

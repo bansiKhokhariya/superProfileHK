@@ -135,7 +135,7 @@ const DesktopPreviewSection = ({ current, testimonials, formData, isVisibleTerms
                             H
                         </div>
                     </div>
-                    <div className='p-2 '>
+                    <div className='p-2'>
                         <div className={`w-full md:w-[208px] shadow-xl -ml-0 md:-ml-20 ${formData.theme == 'light' ? 'bg-white' : 'bg-black'} p-2`}>
                             <p className='font-bold text-[10px]'>Payment Details</p>
                             {formData.pricingType == 'CustomersDecidePrice' &&
@@ -149,10 +149,10 @@ const DesktopPreviewSection = ({ current, testimonials, formData, isVisibleTerms
                                 <label htmlFor="paymentPageEmail" className="mb-2 text-[8px]">Your Email</label>
                                 <input type="email" id="paymentPageEmail" onChange={handleInputChange} value={formData.paymentPageEmail || 'connect.easylifetools@gmail.com'} className="text-[8px] bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
                             </div>
-                            <div>
+                            {/* <div>
                                 <label htmlFor="paymentPagePhone" className="mb-2 text-[8px]">Phone</label>
                                 <input type="text" id="paymentPagePhone" onChange={handleInputChange} value={formData.paymentPagePhone || '9898398859'} className="text-[8px] bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
-                            </div>
+                            </div> */}
                             {formData.pricingType == 'FixedPrice' && <>
                                 {formData.priceInput && <div className='mt-2'>
                                     <p className='text-[8px]'>Amount total</p>

@@ -147,10 +147,10 @@ const MobilePreviewSection = ({ current, testimonials, formData, isVisibleTermsC
                   <label htmlFor="paymentPageEmail" className="text-[8px]">Your Email</label>
                   <input type="email" id="paymentPageEmail" onChange={handleInputChange} value={formData.paymentPageEmail || 'connect.easylifetools@gmail.com'} className="text-[8px] bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
                 </div>
-                <div>
+                {/* <div>
                   <label htmlFor="paymentPagePhone" className="text-[8px]">Phone</label>
                   <input type="text" id="paymentPagePhone" onChange={handleInputChange} value={formData.paymentPagePhone || '9898398859'} className="text-[8px] bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5" />
-                </div>
+                </div> */}
               </div>
             }
           </div>
