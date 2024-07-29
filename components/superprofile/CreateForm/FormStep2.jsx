@@ -4,6 +4,8 @@ import FaqTestimonialModal from '../../modal/FaqTestimonialModal';
 import SocialLinksModal from '../../modal/SocialLinksModal';
 import Image from 'next/image'
 import dynamic from 'next/dynamic';
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
 
 const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
 
@@ -230,7 +232,6 @@ const FormStep2 = ({ formData, setFormData, errors, onFormDataChange }) => {
     });
   };
 
-
   const handleDeleteFile = () => {
     setFormData({
       ...formData,
@@ -248,14 +249,14 @@ const FormStep2 = ({ formData, setFormData, errors, onFormDataChange }) => {
     <div className='flex flex-col gap-6'>
       <div>
         <label className='font-bold'>Tell us about your page</label>
-        <div className="mt-4">
-          <label htmlFor="pagetitle" className="block mb-2 text-sm font-medium">Page Title</label>
-          <input type="text" id="pagetitle" value={formData.pagetitle ?? ''} onChange={handleInputChange} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="Give your page title" />
-          {errors.pagetitle && <p className="text-red-500 text-sm mt-1">{errors.pagetitle}</p>}
+        <div className='grid items-center gap-2 mt-4'>
+          <Label htmlFor="pagetitle">Page Title</Label>
+          <Input type="text" id="pagetitle" value={formData.pagetitle ?? ''} onChange={handleInputChange} placeholder="Give your page title" />
+          {errors.pagetitle && <p className="text-red-500 text-sm">{errors.pagetitle}</p>}
         </div>
         <div className='mt-4'>
           <label htmlFor="pageCategory" className="block mb-2 text-sm font-medium">Category</label>
-          <select id="pageCategory" value={formData.pageCategory ?? ''} onChange={handleInputChange} className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-pink-500 block w-full p-2.5 ">
+          <select id="pageCategory" value={formData.pageCategory ?? ''} onChange={handleInputChange} className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-indigo-500 block w-full p-2.5 ">
             <option value="finance">Finance</option>
             <option value="education">Education</option>
             <option value="food">Food</option>
@@ -307,7 +308,7 @@ const FormStep2 = ({ formData, setFormData, errors, onFormDataChange }) => {
                   <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                   </svg>
-                  <p className="text-sm "><span className="text-pink-500">Browse </span> files from your system</p>
+                  <p className="text-sm "><span className="text-indigo-500">Browse </span> files from your system</p>
                   <p className='text-xs text-gray-500'>1280 x 720 (16:9) recommended</p>
                 </div>
                 <input id="coverfiles" type="file" className="hidden" onChange={handleFileChange} />
@@ -343,10 +344,10 @@ const FormStep2 = ({ formData, setFormData, errors, onFormDataChange }) => {
           </div>
           {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
         </div>
-        <div className="mt-4">
-          <label htmlFor="buttonText" className="block mb-2 text-sm font-medium">Button Text</label>
-          <input type="text" id="buttonText" value={formData.buttonText ?? 'Make Payment'} onChange={handleInputChange} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="Make Payment" />
-          {errors.buttonText && <p className="text-red-500 text-sm mt-1">{errors.buttonText}</p>}
+        <div className='grid items-center gap-2 mt-4'>
+          <Label htmlFor="buttonText">Page Title</Label>
+          <Input type="text" id="buttonText" value={formData.buttonText ?? 'Make Payment'} onChange={handleInputChange} placeholder="Make Payment" />
+          {errors.buttonText && <p className="text-red-500 text-sm">{errors.buttonText}</p>}
         </div>
       </div>
       <div className=''>
@@ -378,7 +379,7 @@ const FormStep2 = ({ formData, setFormData, errors, onFormDataChange }) => {
               </div>}
             </div>
             <div>
-              <p className='text-sm font-bold text-pink-500 cursor-pointer' onClick={() => handleFaqModal()}>+ Add Question</p>
+              <p className='text-sm font-bold text-indigo-500 cursor-pointer' onClick={() => handleFaqModal()}>+ Add Question</p>
             </div>
           </div>
           <div className='border rounded shadow p-3 w-full flex flex-col gap-2'>
@@ -407,7 +408,7 @@ const FormStep2 = ({ formData, setFormData, errors, onFormDataChange }) => {
               </div>}
             </div>
             <div>
-              <p className='text-sm font-bold text-pink-500 cursor-pointer' onClick={() => handleTestimonialModal()}>+ Add Testimonial</p>
+              <p className='text-sm font-bold text-indigo-500 cursor-pointer' onClick={() => handleTestimonialModal()}>+ Add Testimonial</p>
             </div>
           </div>
           <div className='border rounded shadow p-3 w-full flex flex-col gap-2'>
@@ -436,7 +437,7 @@ const FormStep2 = ({ formData, setFormData, errors, onFormDataChange }) => {
               )}
             </div>
             <div>
-              <p className='text-sm font-bold text-pink-500 cursor-pointer' onClick={() => handleSocialModal()}>+ Add/Edit Social Links</p>
+              <p className='text-sm font-bold text-indigo-500 cursor-pointer' onClick={() => handleSocialModal()}>+ Add/Edit Social Links</p>
             </div>
           </div>
         </div>

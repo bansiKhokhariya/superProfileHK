@@ -4,7 +4,6 @@ import PaymentPage from '@/components/superprofile/PaymentPage/PaymentPage'
 import ViewProduct from '@/components/superprofile/PaymentPage/ViewProduct'
 import SuccessPaymentBox from '@/components/superprofile/PaymentPage/SuccessPaymentBox'
 import toast from 'react-hot-toast'
-import FaqItem from '@/components/superprofile/PaymentPage/FaqItem';
 import renderSocialIcon from '@/utils/renderSocialIcon';
 import { magic } from '@/libs/magic';
 
@@ -13,12 +12,11 @@ const Page = ({ params }) => {
         paymentPageEmail: '',
     });
     const [isVisibleTermsCondition, setIsVisibleTermsCondition] = useState(false);
-    const [current, setCurrent] = useState(0);
     const [customAmountError, setCustomAmountError] = useState('');
     const [productViewPage, setProductViewPage] = useState(false);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
-    const [paymentPage, setPaymentPage] = useState(0)
     const [paymentProductId, setPaymentProductId] = useState()
+    const [paymentPage, setPaymentPage] = useState(0)
     const [paymentData, setPaymentData] = useState('')
     const [user, setUser] = useState(null);
 
@@ -51,7 +49,7 @@ const Page = ({ params }) => {
 
     const callFacebookEvent = () => {
 
-        if (!formData && !formData.eventName && !formData.pixelId) {
+        if (!formData && !formData.pixelId) {
             return;
         } else {
             const eventData = {
@@ -63,7 +61,7 @@ const Page = ({ params }) => {
                 }
             };
             try {
-                fbq('track', "Purchase", { message: eventData.message, additionalData: eventData.additionalData });
+                fbq('track', 'Purchase', { message: eventData.message, additionalData: eventData.additionalData });
                 toast.success('Facebook event successfully called!');
             } catch (error) {
                 toast.error('Failed to call Facebook event.');
@@ -95,7 +93,6 @@ const Page = ({ params }) => {
         }
         return null;
     };
-
 
     const originalPrice = parseFloat(formData.priceInput);
     const discountedPrice = parseFloat(formData.offerDiscountInput);
@@ -138,16 +135,6 @@ const Page = ({ params }) => {
         setIsVisibleTermsCondition(!isVisibleTermsCondition);
     };
 
-    const testimonials = formData.testimonials;
-
-    const handlePrev = () => {
-        setCurrent(current === 0 ? testimonials.length - 1 : current - 1);
-    };
-
-    const handleNext = () => {
-        setCurrent(current === testimonials.length - 1 ? 0 : current + 1);
-    };
-
     const handlePaymentButton = () => {
         if (paymentPage === 0) {
             setPaymentPage(paymentPage + 1)
@@ -165,7 +152,6 @@ const Page = ({ params }) => {
 
     const makePayment = async () => {
 
-        // callFacebookEvent()
 
         if (formData.limitQuantityInput) {
             try {
@@ -196,7 +182,7 @@ const Page = ({ params }) => {
                 const amount =
                     formData.pricingType === 'FixedPrice'
                         ? discountedPrice || originalPrice
-                        : formData.customAmount;
+                        : formData.minimunInput;
 
                 if (amount < formData.minimunInput) {
                     setCustomAmountError(`Amount should be more than ${formData.minimunInput}`);
@@ -318,19 +304,13 @@ const Page = ({ params }) => {
             {!productViewPage && <PaymentPage
                 setProductViewPage={setProductViewPage}
                 paymentData={paymentData}
-                paymentProductId={paymentProductId}
                 formData={formData}
                 handleInputChange={handleInputChange}
                 discountPercentage={discountPercentage}
                 renderSocialIcon={renderSocialIcon}
-                handleNext={handleNext}
-                handlePrev={handlePrev}
                 customAmountError={customAmountError}
-                FaqItem={FaqItem}
                 toggleVisibleTermsCondition={toggleVisibleTermsCondition}
                 isVisibleTermsCondition={isVisibleTermsCondition}
-                testimonials={testimonials}
-                current={current}
                 makePayment={makePayment}
                 paymentPage={paymentPage}
                 handlePaymentButton={handlePaymentButton}

@@ -155,6 +155,7 @@
 
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
+import { Button } from '@/components/ui/button'
 
 const SocialLinksModal = ({ showModal, handleClose, handleFormSubmit, formData }) => {
   const initialSocialLinks = useMemo(() => ({
@@ -232,7 +233,7 @@ const SocialLinksModal = ({ showModal, handleClose, handleFormSubmit, formData }
   if (!showModal) return null;
 
   return (
-    <div className='fixed top-0 left-0 w-full h-full bg-gray-200 z-50 flex justify-center items-center'>
+    <div className='fixed top-0 left-0 w-full h-full bg-black/80 z-50 flex justify-center items-center'>
       <div className='w-full max-w-2xl max-h-full bg-white shadow-lg p-4 rounded-md'>
         <div className='border-b border-gray-300 flex justify-between items-center mb-4'>
           <h2 className='text-gray-900 font-bold mb-4'>Social Links</h2>
@@ -291,13 +292,7 @@ const SocialLinksModal = ({ showModal, handleClose, handleFormSubmit, formData }
             </div>
           </div>
         </div>
-        <button
-          type='button'
-          className='h-8 px-2 mt-4 text-sm rounded-md bg-gray-700 text-white'
-          onClick={handleSubmit}
-        >
-          Save Socials
-        </button>
+        <Button size='sm' onClick={handleSubmit}> Save Socials</Button>
       </div>
     </div>
   );

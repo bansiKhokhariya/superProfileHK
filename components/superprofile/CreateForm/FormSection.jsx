@@ -5,6 +5,7 @@ import FormStep2 from './FormStep2'
 import FormStep3 from './FormStep3'
 import FormStep4 from './FormStep4'
 import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
 
 const FormSection = ({ showPreview, setShowPreview, formData, setFormData, productId }) => {
   const router = useRouter();
@@ -113,7 +114,7 @@ const FormSection = ({ showPreview, setShowPreview, formData, setFormData, produ
         body: JSON.stringify(formData),
       });
       if (response.ok) {
-         await response.json();
+        await response.json();
         router.push(`/`);
       } else {
         const errorData = await response.json();
@@ -139,9 +140,7 @@ const FormSection = ({ showPreview, setShowPreview, formData, setFormData, produ
           <div>
             <Link href={'/'}><b>✕</b></Link>  &nbsp;  | &nbsp; New Checkout Page
           </div>
-          <button className='border px-3 py-1 rounded-full block lg:hidden' onClick={handlePreviewClick}>
-            Preview
-          </button>
+          <Button size='sm' className='block lg:hidden' onClick={handlePreviewClick}>Preview</Button>
         </div>
         {productId && <div className='flex ml-8 mt-4 gap-4 text-sm text-gray-500'>
           <button className={stepPage === 1 ? 'border-b border-gray-900' : ''} onClick={() => handleEditPageStep(1)}>Product</button>
@@ -164,9 +163,9 @@ const FormSection = ({ showPreview, setShowPreview, formData, setFormData, produ
         </div>
         :
         <div className='absolute bg-white sticky bottom-0 border-t p-4 text-end'>
-          {stepPage != 1 && <button className='mr-5 font-bold' onClick={handleBackPage}>⇐ Back</button>}
-          {stepPage == 4 && <button className='bg-black text-white py-2 px-4 rounded-full text-sm' onClick={handlePublishChanges}>Publish Changes</button>}
-          {stepPage != 4 && <button className='bg-black text-white py-2 px-4 rounded-full text-sm' onClick={handleSaveAndContinue}>Save and Continue</button>}
+          {stepPage != 1 && <Button size='sm' variant='outline' className='mr-2' onClick={handleBackPage}>⇐ Back</Button>}
+          {stepPage == 4 && <Button size='sm' onClick={handlePublishChanges}>Publish Changes</Button>}
+          {stepPage != 4 && <Button size='sm' onClick={handleSaveAndContinue}>Save and Continue</Button>}
         </div>
       }
     </>

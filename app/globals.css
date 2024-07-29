@@ -2,122 +2,105 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  scroll-behavior: smooth !important;
-}
-
-/* It makes the HTML progress bar filling smooth when value change. */
-progress::-webkit-progress-value {
-  transition: 0.6s width ease-out;
-}
-
-@layer base {
-  .btn-gradient {
-    @apply !bg-gradient !bg-[length:300%_300%] hover:saturate-[1.2] shadow duration-100 !border-0 !border-transparent !bg-transparent animate-shimmer !text-white;
-  }
-
-  .btn-gradient:disabled {
-    @apply !bg-none !bg-gray-500/30;
-  }
-
-  .btn {
-    @apply !capitalize;
-  }
-}
-
-.separator {
-  height: 10px;
-}
 
 
 /*  toggle button */
 .switch {
-  position: relative;
-  display: inline-block;
-  width: 54px;
-  height: 28px;
+    position: relative;
+    display: inline-block;
+    width: 54px;
+    height: 28px;
 }
 
 .switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
 .customToggle:checked+.slider {
-  background-color: #ec4899;
+    background-color: #5d60df;
 }
 
 .customToggle:focus+.slider {
-  box-shadow: 0 0 1px #ec4899;
+    box-shadow: 0 0 1px #5d60df;
 }
 
 .customToggle:checked+.slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
 }
 
 .slider.round {
-  border-radius: 34px;
+    border-radius: 34px;
 }
 
 .slider.round:before {
-  border-radius: 50%;
-}
-
-.desktop-preview-container{
-  height: 515px;
-  overflow: auto;
-  scrollbar-width: none;
+    border-radius: 50%;
 }
 
 
+/* desktop preview section css */
+@media (max-width:500px) {
+    .desktop-preview-container {
+        height: 290px;
+    }
+}
 
-/* styles/globals.css or a dedicated CSS file */
+.desktop-preview-container {
+    height: 515px;
+    overflow: auto;
+    scrollbar-width: none;
+}
+
+/* cracker payment success css */
 @keyframes explode {
-  0% { transform: scale(0); opacity: 0; }
-  50% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(0); opacity: 0; }
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
 }
 
 .cracker {
-  position: absolute;
-  border-radius: 50%;
-  background-color: gold;
-  width: 10px;
-  height: 10px;
-  animation: explode 5s ease-in-out forwards;
-}
-
-
-@media (max-width:500px) {
-  .desktop-preview-container{
-    height: 290px;
-  }
+    position: absolute;
+    border-radius: 50%;
+    background-color: gold;
+    width: 10px;
+    height: 10px;
+    animation: explode 5s ease-in-out forwards;
 }

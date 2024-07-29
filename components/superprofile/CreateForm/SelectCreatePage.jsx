@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Link from "next/link";
+import { Button } from '@/components/ui/button'
 
 const SelectCreatePage = ({ setContinueBtn, continueBtn, setSelectedProduct }) => {
   const [selectMethod, setSelectMethod] = useState('');
@@ -73,9 +74,9 @@ const SelectCreatePage = ({ setContinueBtn, continueBtn, setSelectedProduct }) =
           </div>
         </div>
         <Link href={'/'}>
-          <button className="absolute top-4 left-4  text-sm px-5">⇐ Back </button>
+          <Button size='sm' variant='ghost' className='absolute top-4 left-4'>⇐ Back </Button>
         </Link>
-        <button className={`absolute bottom-4 right-4 text-white bg-gray-800 hover:bg-gray-900 border border-blue-400 focus:outline-none rounded-lg text-sm px-5 py-2.5 me-2 ${selectMethod ? '' : 'opacity-50 cursor-not-allowed'}`} onClick={handleContinue}>Continue ⇒</button>
+        <Button size='sm' className={`absolute bottom-4 right-4 ${selectMethod ? '' : 'opacity-50 cursor-not-allowed'}`} onClick={handleContinue}>Continue ⇒ </Button>
       </div>
     </>
   )

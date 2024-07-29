@@ -8,13 +8,13 @@ const CardView = ({ products, fetchProducts, handleShare }) => {
             <div className="px-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 sm:grid-cols-2  gap-5 lg:gap-10">
                     {products && products.length === 0 ? (
-                        <p>No products available</p>
+                        <p className='font-bold py-4'>No products available</p>
                     ) : (
                         products.map((product, index) => (
-                            <div key={index} className="rounded-lg overflow-hidden shadow-lg">
+                            <div key={index} className="rounded-xl overflow-hidden shadow-lg border-b-4 border-indigo-500">
                                 <div className="relative">
                                     <a className="relative block overflow-hidden group">
-                                        <div className="w-full h-40 relative">
+                                        <div className="w-full h-48 relative">
                                             <Image
                                                 src={product.coverfiles && product.coverfiles.preview || '/images/defaultImage.webp'}
                                                 layout="fill"
@@ -45,7 +45,7 @@ const CardView = ({ products, fetchProducts, handleShare }) => {
 
                                 </div>
                                 <div className="p-2">
-                                    <p className="pb-2">{product.pagetitle}</p>
+                                    <p className="pb-2 font-bold text-gray-500">{product.pagetitle}</p>
                                     <hr />
                                     <div className="py-2 text-gray-500 text-sm gap-2 flex flex-col">
                                         <div className="flex justify-between ">

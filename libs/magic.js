@@ -1,26 +1,26 @@
-// import { Magic } from 'magic-sdk';
-// import { OAuthExtension } from '@magic-ext/oauth';
-
-// // Create client-side Magic instance
-// const createMagic = (key) => {
-//   return (
-//     typeof window != 'undefined' &&
-//     new Magic(key, {
-//       extensions: [new OAuthExtension()],
-//     })
-//   );
-// };
-
-// export const magic = createMagic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY);
-
-
 import { Magic } from 'magic-sdk';
+import { OAuthExtension } from '@magic-ext/oauth';
 
-const createMagic = () => {
+// Create client-side Magic instance
+const createMagic = (key) => {
   return (
-    typeof window !== 'undefined' &&
-    new Magic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY)
+    typeof window != 'undefined' &&
+    new Magic(key, {
+      extensions: [new OAuthExtension()],
+    })
   );
 };
 
-export const magic = createMagic();
+export const magic = createMagic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY);
+
+
+// import { Magic } from 'magic-sdk';
+
+// const createMagic = () => {
+//   return (
+//     typeof window !== 'undefined' &&
+//     new Magic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY)
+//   );
+// };
+
+// export const magic = createMagic();

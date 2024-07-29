@@ -29,7 +29,7 @@ const ViewProduct = ({ setProductViewPage, formData }) => {
                         </div>
                         <div className='bg-white border border-gray-300 rounded-lg'>
                             <div className='p-4 border-b'>
-                                <p className='font-bold'>Contact easylifetools</p>
+                                <p className='font-bold'>Contact</p>
                             </div>
                             <div className='p-4 gap-1 '>
                                 <p className='text-gray-500 '>{formData.supportEmail}</p>

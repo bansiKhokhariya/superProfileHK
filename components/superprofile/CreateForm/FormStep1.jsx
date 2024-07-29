@@ -2,6 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image'
 import isUrl from 'is-url';
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
 
 const FormStep1 = ({ errors, formData, setFormData, onFormDataChange, setErrors }) => {
 
@@ -35,7 +38,7 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange, setErrors 
                 [id]: value,
             });
         }
-        
+
         const updatedErrors = { ...errors };
 
         if (id === 'offerDiscountInput') {
@@ -163,29 +166,18 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange, setErrors 
                             <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                             </svg>
-                            <p className="mb-2 text-sm "><span className="text-pink-500">Browse </span> files from your system</p>
+                            <p className="mb-2 text-sm "><span className="text-indigo-500">Browse </span> files from your system</p>
                         </div>
                         <input id="digitalFiles" type="file" className="hidden" multiple onChange={handleFileChange} />
                     </label>
                     <div className='text-xs text-gray-500 text-center'>OR</div>
-                    <div>
-                        <label htmlFor="website-admin" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Add Link</label>
-                        <div className="flex">
-                            <input
-                                type="text"
-                                value={link}
-                                onChange={handleLinkChange}
-                                className="rounded-l-lg bg-gray-50 border text-gray-900 focus:outline-none focus:border-pink-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5"
-                                placeholder="Add link to your files"
-                            />
-                            <button
-                                onClick={handleAddLink}
-                                className="inline-flex items-center px-5 text-sm text-white bg-black rounded-r-lg"
-                            >
-                                Add
-                            </button>
+                    <div className='mt-3 grid items-center gap-2'>
+                        <Label htmlFor="customAmount">Add Link</Label>
+                        <div className='flex '>
+                            <Input type="text" value={link} onChange={handleLinkChange} placeholder="Add link to your files" />
+                            <Button className='rounded-r-lg'>Add</Button>
                         </div>
-                        {linkError && <p className='text-xs text-red-500 mt-1'>{linkError}</p>}
+                        {linkError && <p className='text-sm text-red-500'>{linkError}</p>}
                     </div>
                 </div>
                 {errors.digitalFiles && <p className="text-red-500 text-sm mt-1">{errors.digitalFiles}</p>}
@@ -212,27 +204,27 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange, setErrors 
             <div>
                 <label className="font-bold">Set Pricing</label>
                 <div className="flex mt-4 justify-between gap-2">
-                    <div className={`border ${formData.pricingType == 'FixedPrice' && 'border-pink-500'}  rounded-md p-6`} onClick={() => handlePricingType('FixedPrice')}>
+                    <div className={`border ${formData.pricingType == 'FixedPrice' && 'border-indigo-500'}  rounded-md p-6`} onClick={() => handlePricingType('FixedPrice')}>
                         <div className="flex justify-between gap-2">
                             <p className="font-bold text-sm">Fixed Price</p>
-                            {formData.pricingType == 'FixedPrice' ? <div className="bg-pink-500 px-1.5 text-white rounded-full h-full"> ✓ </div> : <div className="bg-white px-1.5 text-white border rounded-full h-full">✓</div>}
+                            {formData.pricingType == 'FixedPrice' ? <div className="bg-indigo-500 px-1.5 text-white rounded-full h-full"> ✓ </div> : <div className="bg-white px-1.5 text-white border rounded-full h-full">✓</div>}
                         </div>
                         <p className="mt-2 text-sm">Charge a one-time fixed pay</p>
                     </div>
-                    <div className={`border ${formData.pricingType == 'CustomersDecidePrice' && 'border-pink-500'}  rounded-md p-6`} onClick={() => handlePricingType('CustomersDecidePrice')}>
+                    <div className={`border ${formData.pricingType == 'CustomersDecidePrice' && 'border-indigo-500'}  rounded-md p-6`} onClick={() => handlePricingType('CustomersDecidePrice')}>
                         <div className="flex justify-between gap-2">
                             <p className="font-bold text-sm">Customers decide price</p>
-                            {formData.pricingType == 'CustomersDecidePrice' ? <div className="bg-pink-500 px-1.5 text-white rounded-full h-full"> ✓ </div> : <div className="bg-white px-1.5 text-white border rounded-full h-full">✓</div>}
+                            {formData.pricingType == 'CustomersDecidePrice' ? <div className="bg-indigo-500 px-1.5 text-white rounded-full h-full"> ✓ </div> : <div className="bg-white px-1.5 text-white border rounded-full h-full">✓</div>}
                         </div>
                         <p className="mt-2 text-sm">Let customers pay any price</p>
                     </div>
                 </div>
                 {/* Fixed Price */}
                 {formData.pricingType == 'FixedPrice' && <div>
-                    <div className="mt-4">
-                        <label htmlFor="priceInput" className="block mb-2 text-sm font-medium">Price</label>
-                        <input type="number" id="priceInput" value={formData.priceInput ?? ''} onChange={handleInputChange} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="₹ &nbsp; 1" />
-                        {errors.priceInput && <p className="text-red-500 text-sm mt-1">{errors.priceInput}</p>}
+                    <div className='grid items-center gap-2 mt-4'>
+                        <Label htmlFor="customAmount">Price</Label>
+                        <Input type="number" id="priceInput" value={formData.priceInput ?? ''} onChange={handleInputChange} placeholder="₹ &nbsp; 1" />
+                        {errors.priceInput && <p className="text-red-500 text-sm">{errors.priceInput}</p>}
                     </div>
                     <div className="flex flex-col">
                         <div className="flex items-center">
@@ -246,19 +238,19 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange, setErrors 
                             <label htmlFor="offerDiscountCheckbox" className="py-3 ms-2 text-sm">Offer discounted price &#128712;</label>
                         </div>
                         {formData.offerDiscountCheckbox && (
-                            <>
-                                <input type="number" onChange={handleInputChange} id="offerDiscountInput" value={formData.offerDiscountInput ?? ''} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="₹ &nbsp; 1" />
-                                {errors.offerDiscountInput && <p className="text-red-500 text-sm mt-1">{errors.offerDiscountInput}</p>}
-                            </>
+                            <div className='grid items-center gap-2'>
+                                <Input type="number" onChange={handleInputChange} id="offerDiscountInput" value={formData.offerDiscountInput ?? ''} placeholder="₹ &nbsp; 1" />
+                                {errors.offerDiscountInput && <p className="text-red-500 text-sm">{errors.offerDiscountInput}</p>}
+                            </div>
                         )}
                     </div>
                 </div>}
                 {/* Customers decide price */}
                 {formData.pricingType == 'CustomersDecidePrice' && <div>
-                    <div className="mt-4">
-                        <label htmlFor="minimunInput" className="block mb-2 text-sm font-medium">Minimum Price</label>
-                        <input type="number" id="minimunInput" value={formData.minimunInput ?? ''} onChange={handleInputChange} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="₹ &nbsp; 1" />
-                        {errors.minimunInput && <p className="text-red-500 text-sm mt-1">{errors.minimunInput}</p>}
+                    <div className='grid items-center gap-2 mt-4'>
+                        <Label htmlFor="minimunInput">Minimum Price</Label>
+                        <Input type="number" id="minimunInput" value={formData.minimunInput ?? ''} onChange={handleInputChange} placeholder="₹ &nbsp; 1" />
+                        {errors.minimunInput && <p className="text-red-500 text-sm">{errors.minimunInput}</p>}
                     </div>
                     <div className="flex flex-col">
                         <div className="flex items-center">
@@ -272,10 +264,10 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange, setErrors 
                             <label htmlFor="suggestPriceCheckbox" className="py-3 ms-2 text-sm">Want to suggest a price? &#128712;</label>
                         </div>
                         {formData.suggestPriceCheckbox && (
-                            <>
-                                <input type="number" value={formData.suggestPriceInput ?? ''} id="suggestPriceInput" onChange={handleInputChange} className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="₹ &nbsp; 1" />
-                                {errors.suggestPriceInput && <p className="text-red-500 text-sm mt-1">{errors.suggestPriceInput}</p>}
-                            </>
+                            <div className='grid items-center gap-2'>
+                                <Input type="number" onChange={handleInputChange} value={formData.suggestPriceInput ?? ''} id="suggestPriceInput" placeholder="₹ &nbsp; 1" />
+                                {errors.suggestPriceInput && <p className="text-red-500 text-sm">{errors.suggestPriceInput}</p>}
+                            </div>
                         )}
                     </div>
                 </div>}
@@ -295,7 +287,7 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange, setErrors 
                     </div>
                     {formData.limitQuantityCheckBox && (
                         <>
-                            <input type="number" id="limitQuantityInput" value={formData.limitQuantityInput ?? ''} onChange={handleInputChange} className="mt-4 border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="0" />
+                            <Input className='mt-2' type="number" id="limitQuantityInput" value={formData.limitQuantityInput ?? ''} onChange={handleInputChange} placeholder="0" />
                             <p className='text-gray-400 text-sm mt-1'>Set a maximum limit on total stock available</p>
                         </>
                     )}
@@ -319,7 +311,7 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange, setErrors 
                     </div>
                     {formData.productPolicyToggle && (
                         <>
-                            <textarea id="productPolicyTextArea" value={formData.productPolicyTextArea ?? ''} onChange={handleInputChange} className="mt-4 border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="Enter your refund policy" />
+                            <textarea id="productPolicyTextArea" value={formData.productPolicyTextArea ?? ''} onChange={handleInputChange} className="mt-4 border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 block w-full p-2.5" placeholder="Enter your refund policy" />
                             <div className="flex flex-col">
                                 <div className="flex items-center">
                                     <input
@@ -334,8 +326,8 @@ const FormStep1 = ({ errors, formData, setFormData, onFormDataChange, setErrors 
                                 {formData.productPolicyCheckbox && (
                                     <>
                                         <div className='flex gap-2'>
-                                            <input type="number" id="timePeriodInput" value={formData.timePeriodInput ?? ''} onChange={handleInputChange} className="w-1/2 border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" placeholder="0" />
-                                            <select onChange={handleInputChange} value={formData.timePeriodSelect ?? ''} id="timePeriodSelect" className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-pink-500 block w-full p-2.5 ">
+                                            <Input className='mt-2' type="number" id="timePeriodInput" value={formData.timePeriodInput ?? ''} onChange={handleInputChange} placeholder="0" />
+                                            <select onChange={handleInputChange} value={formData.timePeriodSelect ?? ''} id="timePeriodSelect" className="text-sm bg-gray-50 border border-gray-300 text-gray-900  rounded-lg focus:ring-blue-500 focus:border-indigo-500 block w-full px-2">
                                                 <option value="hours">Hours</option>
                                                 <option value="days">Days</option>
                                                 <option value="months">Months</option>

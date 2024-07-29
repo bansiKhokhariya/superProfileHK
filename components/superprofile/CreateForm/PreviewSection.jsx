@@ -2,11 +2,24 @@ import React, { useState, useRef } from 'react';
 import DesktopPreviewSection from './DesktopPreviewSection';
 import MobilePreviewSection from './MobilePreviewSection';
 import Image from 'next/image'
+import { Card, CardContent } from "@/components/ui/card"
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const PreviewSection = ({ formData, setFormData, setShowPreview }) => {
     const [isMobileView, setIsMobileView] = useState(false);
     const [isVisibleTermsCondition, setIsVisibleTermsCondition] = useState(false);
-    const [current, setCurrent] = useState(0);
     const [customAmountError, setCustomAmountError] = useState('');
 
     const handleMobileClick = () => {
@@ -19,76 +32,6 @@ const PreviewSection = ({ formData, setFormData, setShowPreview }) => {
 
     const toggleVisibleTermsCondition = () => {
         setIsVisibleTermsCondition(!isVisibleTermsCondition);
-    };
-
-    const FaqItem = ({ item }) => {
-        const accordion = useRef(null);
-        const [isOpen, setIsOpen] = useState(false);
-
-        return (
-            <li>
-                <button
-                    className="flex flex-col gap-1 w-full px-2 pt-1 border rounded"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        setIsOpen(!isOpen);
-                    }}
-                    aria-expanded={isOpen}
-                >
-                    <div className='flex items-center justify-between w-full'>
-                        <span
-                            className={`text-[8px] font-bold`}
-                        >
-                            {item?.question}
-                        </span>
-                        <svg
-                            className={`flex-shrink-0 w-2 h-2 ml-auto fill-current`}
-                            viewBox="0 0 16 16"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <rect
-                                y="7"
-                                width="16"
-                                height="2"
-                                rx="1"
-                                className={`transform origin-center transition duration-200 ease-out ${isOpen && "rotate-180"
-                                    }`}
-                            />
-                            <rect
-                                y="7"
-                                width="16"
-                                height="2"
-                                rx="1"
-                                className={`transform origin-center rotate-90 transition duration-200 ease-out ${isOpen && "rotate-180 hidden"
-                                    }`}
-                            />
-                        </svg>
-                    </div>
-                    <div
-                        ref={accordion}
-                        className={`transition-all duration-300 ease-in-out opacity-80 overflow-hidden`}
-                        style={
-                            isOpen
-                                ? { maxHeight: accordion?.current?.scrollHeight, opacity: 1 }
-                                : { maxHeight: 0, opacity: 0 }
-                        }
-                    >
-                        <div className="text-left text-[8px]">{item?.answer}</div>
-                    </div>
-
-                </button>
-            </li>
-        );
-    };
-
-    const testimonials = formData.testimonials;
-
-    const handlePrev = () => {
-        setCurrent(current === 0 ? testimonials.length - 1 : current - 1);
-    };
-
-    const handleNext = () => {
-        setCurrent(current === testimonials.length - 1 ? 0 : current + 1);
     };
 
     const renderSocialIcon = (platform) => {
@@ -141,6 +84,122 @@ const PreviewSection = ({ formData, setFormData, setShowPreview }) => {
         }
     };
 
+    const commanPartMainContainer = () => {
+        return (
+            <div className='flex flex-col gap-3'>
+                <div className='flex gap-1 items-center'>
+                    <Image src={formData && formData.customizePageLogo && formData.customizePageLogo.preview || "/images/mainLogo.webp"} width={40} height={40} className='rounded-full h-10 w-10' alt='customizePageLogo' />
+                    <p className='text-xs'>{formData.customizePageTitle || 'easylifetools'}</p>
+                </div>
+                {formData.pagetitle &&
+                    <div>
+                        <p className='font-bold text-lg'>{formData.pagetitle}</p>
+                    </div>
+                }
+                {formData.coverfiles &&
+                    <div>
+                        <Image src={formData.coverfiles.preview} height={200} width={200} className='rounded-md' alt='coverfiles' />
+                    </div>
+                }
+                {formData.description &&
+                    <div >
+                        <p className='font-bold'>
+                            Description
+                        </p>
+                        <div className={`mt-2 text-xs shadow border rounded p-2 `}>
+                            <div dangerouslySetInnerHTML={{ __html: formData.description }} />
+                        </div>
+                    </div>
+                }
+                <div className='shadow border rounded-lg p-2'>
+                    <div className='flex items-center gap-2 '>
+                        <div className='border w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs'>
+                            H
+                        </div>
+                        <div className='text-sm'>
+                            HK
+                        </div>
+                    </div>
+                    <div className='mt-3'>
+                        <a href="https://www.instagram.com/hkappsofficial" target="_blank" rel="noopener noreferrer">
+                            <Image src='/images/instagram.webp' width={12} height={12} alt='instagram' />
+                        </a>
+                    </div>
+                </div>
+                {formData.faqsViewToggle && formData.faqs && <div className='mt-4'>
+                    <p className='font-bold'>
+                        Frequently Asked Questions (FAQs)
+                    </p>
+                    <Accordion type="single" collapsible>
+                        {formData.faqs.map((item, i) => (
+                            <AccordionItem key={i} value={'value-' + i}>
+                                <AccordionTrigger>{item.question}</AccordionTrigger>
+                                <AccordionContent>
+                                    Yes. It adheres to the WAI-ARIA design pattern.
+                                </AccordionContent>
+                            </AccordionItem>
+                        ))}
+                    </Accordion>
+                </div>}
+                {formData.testimonialsViewToggle && formData.testimonials &&
+                    <div>
+                        <p className='font-bold'>
+                            Testimonials
+                        </p>
+                        <div className='px-12'>
+                            <Carousel>
+                                <CarouselContent>
+                                    {formData.testimonials.map((testimonial, index) => (
+                                        <CarouselItem key={index}>
+                                            <div className="p-1">
+                                                <Card>
+                                                    <CardContent className="flex flex-col p-2">
+                                                        <div className='text-[30px]'> ❝</div>
+                                                        <span className="font-semibold text-sm -mt-5">{testimonial.name}</span>
+                                                        <p className="text-base text-sm">{testimonial.comment}</p>
+                                                    </CardContent>
+                                                </Card>
+                                            </div>
+                                        </CarouselItem>
+                                    ))}
+                                </CarouselContent>
+                                <CarouselPrevious />
+                                <CarouselNext />
+                            </Carousel>
+                        </div>
+                    </div>
+                }
+                {formData.supportEmail && <div>
+                    <p className='cursor-pointer font-bold'>
+                        Contact
+                    </p>
+                    <p className='mt-1'><span className='text-lg'>✉</span> &nbsp;&nbsp; {formData.supportEmail}</p>
+                    <p className=''>📞 &nbsp; {formData.supportContact}</p>
+                    {formData.socialLinksViewToggle && formData.socialLinks && (
+                        <div className="flex mt-2">
+                            {Object.entries(formData.socialLinks).map(([platform, link], index) => (
+                                <a key={index} href={`https://${link}`} target="_blank" rel="noopener noreferrer" className="mx-0.5 text-gray-700 hover:text-gray-900">
+                                    {renderSocialIcon(platform)}
+                                </a>
+                            ))}
+                        </div>
+                    )}
+                </div>}
+                <div>
+                    <p onClick={toggleVisibleTermsCondition} className='cursor-pointer font-bold'>
+                        {isVisibleTermsCondition ? '- Terms and Conditions' : '+ Terms and Conditions'}
+                    </p>
+                    {isVisibleTermsCondition && <p className='text-xs'>You agree to share information entered on this page with easylifetools (owner of this page) and Cosmofeed, adhering to applicable laws.</p>}
+                </div>
+                <div className='w-full bg-gray-200 h-0.5'></div>
+                <div>
+                    <p className='font-bold text-lg'>HKAPPS</p>
+                    <p className='text-xs mt-1'> Want to create your own payment page? Experience hassle-free payouts and premium support. Get started now!</p>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className='py-12 px-10'>
             <div className='flex justify-between gap-10 items-center mb-4'>
@@ -165,30 +224,20 @@ const PreviewSection = ({ formData, setFormData, setShowPreview }) => {
                 {isMobileView ? <MobilePreviewSection
                     formData={formData}
                     handleInputChange={handleInputChange}
-                    discountPercentage={discountPercentage}
-                    renderSocialIcon={renderSocialIcon}
-                    handleNext={handleNext}
-                    handlePrev={handlePrev}
                     customAmountError={customAmountError}
-                    FaqItem={FaqItem}
                     toggleVisibleTermsCondition={toggleVisibleTermsCondition}
-                    isVisibleTermsCondition={isVisibleTermsCondition}
-                    testimonials={testimonials}
-                    current={current} />
+                    commanPartMainContainer={commanPartMainContainer}
+                />
                     :
                     <DesktopPreviewSection
+                        commanPartMainContainer={commanPartMainContainer}
                         formData={formData}
                         handleInputChange={handleInputChange}
                         discountPercentage={discountPercentage}
                         renderSocialIcon={renderSocialIcon}
-                        handleNext={handleNext}
-                        handlePrev={handlePrev}
                         customAmountError={customAmountError}
-                        FaqItem={FaqItem}
                         toggleVisibleTermsCondition={toggleVisibleTermsCondition}
                         isVisibleTermsCondition={isVisibleTermsCondition}
-                        testimonials={testimonials}
-                        current={current}
                     />
                 }
             </div>

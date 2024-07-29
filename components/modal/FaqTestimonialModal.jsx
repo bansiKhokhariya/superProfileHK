@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Button } from '@/components/ui/button'
 
 const FaqTestimonialModal = ({ showModal, handleClose, formData, formFields, handleInputChange, handleFormSubmit, title }) => {
   const [errors, setErrors] = useState({});
@@ -24,7 +25,7 @@ const FaqTestimonialModal = ({ showModal, handleClose, formData, formFields, han
   };
 
   return (
-    <div className='fixed top-0 left-0 w-full h-full bg-gray-200 z-50 flex justify-center items-center'>
+    <div className='fixed top-0 left-0 w-full h-full bg-black/80 z-50 flex justify-center items-center'>
       <div className='w-full max-w-2xl max-h-full bg-white shadow-lg p-4 rounded-md'>
         <div className='border-b border-gray-300 flex justify-between items-center mb-4'>
           <h2 className='text-gray-900 font-bold mb-4'>{title}</h2>
@@ -47,27 +48,21 @@ const FaqTestimonialModal = ({ showModal, handleClose, formData, formFields, han
                   id={field.id}
                   value={formData[field.id]}
                   onChange={(e) => handleInputChange(e, field.id)}
-                  className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5" />
+                  className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 block w-full p-2.5" />
               )}
               {field.type === 'textarea' && (
                 <textarea
                   id={field.id}
                   value={formData[field.id]}
                   onChange={(e) => handleInputChange(e, field.id)}
-                  className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5"
+                  className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-indigo-500 block w-full p-2.5"
                 />
               )}
               {errors[field.id] && <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>}
             </div>
           ))}
         </form>
-        <button
-          type='button'
-          className='h-8 px-2 mt-4 text-sm rounded-md bg-gray-700 text-white'
-          onClick={onSubmit}
-        >
-          Save
-        </button>
+        <Button size='sm' onClick={onSubmit}> Save</Button>
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { SketchPicker } from 'react-color';
 import Image from 'next/image'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
 
 const FormStep4 = ({ formData, setFormData, onFormDataChange }) => {
     const [color, setColor] = useState(formData.color || '#000000');
@@ -69,20 +71,15 @@ const FormStep4 = ({ formData, setFormData, onFormDataChange }) => {
                     <div className='flex items-center gap-4'>
                         <Image src={formData.customizePageLogo && formData.customizePageLogo.preview || "/images/mainLogo.webp"} width={80} height={80} className='rounded-full h-20 w-20' alt="logo" />
                         <label htmlFor="customizePageLogo" className="cursor-pointer">
-                            <p className="py-1 px-3 border hover:bg-pink-500 hover:text-white rounded-full">Change</p>
+                            <p className="py-1 px-3 border hover:bg-indigo-500 hover:text-white rounded-lg">Change</p>
                             <input id="customizePageLogo" type="file" className="hidden" onChange={handleFileChange} />
                         </label>
                     </div>
-                    <div className="mt-4">
-                        <label htmlFor="customizePageTitle" className="block mb-2 text-sm font-medium">Page owner</label>
-                        <input
-                            type="text"
-                            id="customizePageTitle"
-                            value={formData.customizePageTitle ?? 'easylifetools'}
-                            onChange={handleInputChange}
-                            className="border text-gray-900 text-sm rounded-lg focus:outline-none focus:border-pink-500 block w-full p-2.5"
-                            placeholder="Email ID"
-                        />
+                    <div className='flex flex-col'>
+                        <div className='grid items-center gap-2 mt-4'>
+                            <Label htmlFor="customizePageTitle">Page owner</Label>
+                            <Input type="text" id="customizePageTitle" value={formData.customizePageTitle ?? ''} onChange={handleInputChange} placeholder="Enter Title" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -91,7 +88,7 @@ const FormStep4 = ({ formData, setFormData, onFormDataChange }) => {
                 <label className='font-bold mb-4'>Select Template</label>
                 <div className='flex gap-3 mt-4'>
                     <div
-                        className={`border ${formData.theme === 'light' ? 'border-pink-500' : ''} p-2`}
+                        className={`border ${formData.theme === 'light' ? 'border-indigo-500' : ''} p-2`}
                         onClick={() => handleTheme('light')}
                     >
                         <Image src='/svg/lightThemePicure.svg' width={200} height={200} alt="light theme" />
@@ -100,7 +97,7 @@ const FormStep4 = ({ formData, setFormData, onFormDataChange }) => {
                         </p>
                     </div>
                     <div
-                        className={`border ${formData.theme === 'dark' ? 'border-pink-500' : ''} p-2`}
+                        className={`border ${formData.theme === 'dark' ? 'border-indigo-500' : ''} p-2`}
                         onClick={() => handleTheme('dark')}
                     >
                         <Image src='/svg/darkThemePicure.svg' width={200} height={200} alt="dark theme" />
@@ -123,7 +120,7 @@ const FormStep4 = ({ formData, setFormData, onFormDataChange }) => {
                             onClick={() => setShowColorPicker(!showColorPicker)}
                         ></div>
                         <button
-                            className="py-1 px-3 border hover:bg-pink-500 hover:text-white text-sm rounded-md"
+                            className="py-1 px-3 border hover:bg-indigo-500 hover:text-white text-sm rounded-md"
                             onClick={() => setShowColorPicker(!showColorPicker)}
                         >
                             {showColorPicker ? 'Close Color Picker' : 'Open Color Picker'}
