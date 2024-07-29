@@ -6,7 +6,7 @@ const CardView = ({ products, fetchProducts, handleShare }) => {
     return (
         <>
             <div className="px-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 sm:grid-cols-2  gap-5 lg:gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:grid-cols-2  gap-5 lg:gap-10">
                     {products && products.length === 0 ? (
                         <p className='font-bold py-4'>No products available</p>
                     ) : (
@@ -25,11 +25,9 @@ const CardView = ({ products, fetchProducts, handleShare }) => {
                                         </div>
                                         <div className="transition duration-300 absolute bottom-0 top-0 right-0 left-0 bg-gray-900 opacity-25"></div>
                                     </a>
-
                                     <div className="text-sm absolute top-0 right-0 bg-white px-4 text-black rounded-full h-8 w-8 flex flex-col items-center justify-center mt-3 mr-3">
                                         <EditPaymentPopover productID={product._id} fetchProducts={fetchProducts} />
                                     </div>
-
                                     {product.isDraft && product.isPublish && <div onClick={() => { handleShare(product._id) }}>
                                         <div
                                             className="text-sm  absolute top-0 right-9 bg-white px-4 text-black rounded-full h-8 w-8 flex flex-col items-center justify-center mt-3 mr-3 ">
@@ -42,7 +40,6 @@ const CardView = ({ products, fetchProducts, handleShare }) => {
                                             </svg>
                                         </div>
                                     </div>}
-
                                 </div>
                                 <div className="p-2">
                                     <p className="pb-2 font-bold text-gray-500">{product.pagetitle}</p>

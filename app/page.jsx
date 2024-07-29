@@ -1,10 +1,14 @@
-import React from 'react';
-import Main from '@/components/superprofile/listData/Main';
+'use client'
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
-  return (
-    <>
-      <Main />
-    </>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to the profile page
+    router.push('/profile');
+  }, [router]);
+
+  return null;
 }

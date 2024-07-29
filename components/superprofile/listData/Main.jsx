@@ -77,14 +77,14 @@ const Main = () => {
     return (
         <>
             <div>
-                <div className="relative mb-8 h-60 shadow-lg bg-indigo-200 flex items-center justify-center z-0">
+                <div className="mb-8 h-60 shadow-lg bg-indigo-200 flex items-center justify-center">
                     <h1 className="text-3xl sm:text-4xl font-bold ">Payment Page</h1>
                     <Link href={'/create-payment-page'}>
-                        <Button className="absolute top-4 right-4 hidden sm:block">Create Payment Page</Button>
-                        <Button className="absolute top-4 right-4 block sm:hidden font-bold">+</Button>
+                        <Button className="absolute top-8 right-8 hidden sm:block">Create Payment Page</Button>
+                        <Button className="absolute top-20 right-8 block sm:hidden font-bold">+</Button>
                     </Link>
                 </div>
-                <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 px-8 -mt-0 md:-mt-20 relative md:absolute">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 px-8 -mt-0 md:-mt-20">
                     <div className="bg-white p-6 rounded-lg border shadow-md border-b-4 border-indigo-500">
                         <h2 className="text-xs text-gray-500">TOTAL SALE &#128712;</h2>
                         <p className="flex gap-2 items-center text-xl sm:text-2xl font-bold mt-2">{totalSale}<span className="text-xs font-medium text-gray-500">same as last week</span> </p>
@@ -98,7 +98,7 @@ const Main = () => {
                         <p className="flex gap-2 items-center text-xl sm:text-2xl  font-bold mt-2">1%<span className="text-xs font-medium text-gray-500">same as last week</span> </p>
                     </div>
                 </div>
-                <div className="flex gap-2 mb-4 mt-0 md:mt-20 px-8">
+                <div className="flex gap-2 mb-4 px-8">
                     <Button variant={filter === 'published' ? 'default' : 'outline'} onClick={() => setFilter('published')}>Published ({counts.published})</Button>
                     <Button variant={filter === 'unpublished' ? 'default' : 'outline'} onClick={() => setFilter('unpublished')}> Unpublished ({counts.unpublished})</Button>
                     <Button variant={filter === 'draft' ? 'default' : 'outline'} onClick={() => setFilter('draft')}>Draft ({counts.draft})</Button>

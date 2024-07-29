@@ -159,10 +159,6 @@ const Page = ({ params }) => {
                     method: 'GET',
                 });
                 const data = await response.json();
-
-                console.log("data.length", data.payments.length);
-                console.log("formData.limitQuantityInput", formData.limitQuantityInput);
-
                 if (data.payments.length == formData.limitQuantityInput) {
                     toast.error('This User is no more selling this product');
                 } else {
