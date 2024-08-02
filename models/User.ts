@@ -61,7 +61,17 @@ const userSchema = new mongoose.Schema(
       default: "rounded-md",
     },
     links: [linkSchema],
-    socialLinks: { type: Object },
+    // socialLinks: { type: Object },
+    socialLinks: {
+      type: Map,
+      of: new mongoose.Schema({
+        url: String,
+        clicks: {
+          type: Number,
+          default: 0,
+        },
+      }),
+    },
   },
   {
     timestamps: true,

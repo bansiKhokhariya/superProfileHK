@@ -273,7 +273,7 @@ const Profile = ({ formData, setFormData }) => {
                   {link.title}
                 </a>
                 <div>
-                  <span class="bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">{link.clicks} clicks</span>
+                  <span className="bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">{link.clicks} clicks</span>
                 </div>
               </div>
               <div className='flex gap-4 items-center'>

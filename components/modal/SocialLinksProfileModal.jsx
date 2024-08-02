@@ -1,19 +1,18 @@
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 
 const SocialLinksProfileModal = ({ showModal, handleClose, handleFormSubmit, formData }) => {
-
   const initialSocialLinks = useMemo(() => ({
-    instagram: '',
-    twitter: '',
-    facebook: '',
-    youtube: '',
-    linkedin: '',
-    threads: '',
-    behance: '',
-    dribbble: '',
-    whatsapp: ''
+    instagram: { url: '', clicks: 0 },
+    twitter: { url: '', clicks: 0 },
+    facebook: { url: '', clicks: 0 },
+    youtube: { url: '', clicks: 0 },
+    linkedin: { url: '', clicks: 0 },
+    threads: { url: '', clicks: 0 },
+    behance: { url: '', clicks: 0 },
+    dribbble: { url: '', clicks: 0 },
+    whatsapp: { url: '', clicks: 0 }
   }), []);
 
   const [socialLinks, setSocialLinks] = useState(initialSocialLinks);
@@ -24,10 +23,13 @@ const SocialLinksProfileModal = ({ showModal, handleClose, handleFormSubmit, for
     if (formData && formData.socialLinks) {
       const selected = Object.keys(formData.socialLinks);
       setSelectedSocial(selected);
-      const updatedSocialLinks = {
-        ...initialSocialLinks,
-        ...formData.socialLinks
-      };
+      const updatedSocialLinks = { ...initialSocialLinks };
+      selected.forEach(social => {
+        updatedSocialLinks[social] = {
+          url: formData.socialLinks[social].url || '',
+          clicks: formData.socialLinks[social].clicks || 0
+        };
+      });
       setSocialLinks(updatedSocialLinks);
     } else {
       setSelectedSocial([]);
@@ -36,13 +38,16 @@ const SocialLinksProfileModal = ({ showModal, handleClose, handleFormSubmit, for
   }, [formData, initialSocialLinks]);
 
   const handleInputChange = (e, social) => {
-    setSocialLinks({ ...socialLinks, [social]: e.target.value });
+    setSocialLinks({
+      ...socialLinks,
+      [social]: { ...socialLinks[social], url: e.target.value }
+    });
   };
 
   const validateForm = () => {
     let newErrors = {};
     selectedSocial.forEach(social => {
-      if (!socialLinks[social]) {
+      if (!socialLinks[social].url) {
         newErrors[social] = `${social} username is required`;
       }
     });
@@ -53,7 +58,14 @@ const SocialLinksProfileModal = ({ showModal, handleClose, handleFormSubmit, for
   const handleSubmit = () => {
     if (validateForm()) {
       const fullLinks = selectedSocial.reduce((acc, social) => {
-        acc[social] = `${social}.com/${socialLinks[social]}`;
+        const currentUrl = socialLinks[social].url;
+        // Check if the URL is already full, don't prepend the base URL again
+        const url = currentUrl.includes(`${social}.com/`) ? currentUrl : `${social}.com/${currentUrl}`;
+
+        acc[social] = {
+          url,
+          clicks: socialLinks[social].clicks
+        };
         return acc;
       }, {});
       handleFormSubmit(fullLinks);
@@ -72,7 +84,10 @@ const SocialLinksProfileModal = ({ showModal, handleClose, handleFormSubmit, for
 
   const handleCancel = (social) => {
     setSelectedSocial(selectedSocial.filter(item => item !== social));
-    setSocialLinks({ ...socialLinks, [social]: '' });
+    setSocialLinks({
+      ...socialLinks,
+      [social]: { ...socialLinks[social], url: '' }
+    });
     setErrors({});
   };
 
@@ -99,7 +114,7 @@ const SocialLinksProfileModal = ({ showModal, handleClose, handleFormSubmit, for
                   <input
                     type="text"
                     placeholder={`${social}.com/username`}
-                    value={socialLinks[social]}
+                    value={socialLinks[social].url}
                     onChange={(e) => handleInputChange(e, social)}
                     className={`w-full p-2 border rounded-lg ${errors[social] ? 'border-red-500' : ''}`}
                   />
@@ -125,13 +140,11 @@ const SocialLinksProfileModal = ({ showModal, handleClose, handleFormSubmit, for
                 >
                   <div className="flex flex-col">
                     <span className="font-medium ">{social}</span>
-                    <span className="font-medium text-sm text-gray-500"> {selectedSocial.includes(social) ? 'tap to cancel' : 'tap to connect'} </span>
+                    <span className="font-medium text-sm text-gray-500">{selectedSocial.includes(social) ? 'tap to cancel' : 'tap to connect'}</span>
                   </div>
                   {selectedSocial.includes(social)
-                    ?
-                    <button className="text-black font-extrabold">✕</button>
-                    :
-                    <button className="text-black font-extrabold">＋</button>
+                    ? <button className="text-black font-extrabold">✕</button>
+                    : <button className="text-black font-extrabold">＋</button>
                   }
                 </div>
               ))}
@@ -145,5 +158,4 @@ const SocialLinksProfileModal = ({ showModal, handleClose, handleFormSubmit, for
 };
 
 export default SocialLinksProfileModal;
-
 

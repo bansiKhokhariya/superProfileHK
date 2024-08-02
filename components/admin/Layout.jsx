@@ -92,7 +92,7 @@ const Layout = () => {
                     <div className="py-10 px-5 md:px-10 lg:px-10  overflow-y-auto w-full border-r-4 border-indigo-500" style={{ height: "calc(100dvh - 65px)" }}>
                         {activeTab === 'profile' && <Profile formData={formData} setFormData={setFormData} />}
                         {activeTab === 'appearance' && <Appearance formData={formData} setFormData={setFormData} />}
-                        {activeTab === 'analytics' && <Analytics />}
+                        {activeTab === 'analytics' && <Analytics currentUser={formData}/>}
                         {activeTab === 'settings' && <Setting formData={formData} setFormData={setFormData} />}
                     </div>
                     {activeTab !== 'analytics' && (

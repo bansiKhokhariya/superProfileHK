@@ -5,45 +5,21 @@ import { User } from 'lucide-react';
 import { X } from 'lucide-react';
 
 
-const PreviewMobile = ({ close, formData, setFormData }) => {
+const PreviewMobile = ({ close, formData }) => {
 
   const flattenedLinks = formData?.links?.flat();
 
-  const handleLinkClick = async (index, url) => {
+  const handleLinkClick = async (url) => {
     window.open(url, '_blank');
-
-    try {
-      const response = await fetch('/api/links', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: formData.id,
-          linkIndex: index,
-          incrementClicks: true,
-          action: 'update',
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Something went wrong');
-      }
-
-      const data = await response.json();
-      setFormData({ ...formData, links: data.user.links });
-    } catch (error) {
-      console.log(error.message);
-    }
   };
 
   return (
     <>
       <div>
         <div className="absolute inset-0 z-10 flex justify-start items-center flex-col px-20 py-10 " style={{
-        background: formData?.themePalette?.palette[0],
-        color: formData?.themePalette?.palette[2]
-      }}> 
+          background: formData?.themePalette?.palette[0],
+          color: formData?.themePalette?.palette[2]
+        }}>
           <div className="flex items-center gap-4">
             {formData?.image ? <Image
               src={formData?.image}
@@ -62,8 +38,14 @@ const PreviewMobile = ({ close, formData, setFormData }) => {
 
           {formData?.socialLinks && (
             <div className="flex flex-wrap mt-2">
-              {Object.entries(formData.socialLinks).map(([platform, link], index) => (
-                <a key={index} href={`https://${link}`} target="_blank" rel="noopener noreferrer" className="mx-0.5 text-gray-700 hover:text-gray-900">
+              {Object.entries(formData.socialLinks).map(([platform, { url, clicks }], index) => (
+                <a
+                  key={index}
+                  href={`https://${url}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mx-0.5 text-gray-700 hover:text-gray-900"
+                >
                   {renderSocialIcon(platform)}
                 </a>
               ))}
@@ -73,7 +55,7 @@ const PreviewMobile = ({ close, formData, setFormData }) => {
           {flattenedLinks?.length > 0 ? (
             <div className='w-full flex flex-col gap-3 mt-4'>
               {flattenedLinks.map((link, index) => (
-                <button key={index} onClick={() => handleLinkClick(index, link.url)}
+                <button key={index} onClick={() => handleLinkClick(link.url)}
                   style={{
                     background: formData?.themePalette?.palette[1],
                     border: `1px solid ${formData?.themePalette?.palette[3]}`,
@@ -103,8 +85,6 @@ const PreviewMobile = ({ close, formData, setFormData }) => {
           ) : (
             <p>No links available</p>
           )}
-
-
           <div className="rounded-full bottom-[1rem] absolute left-1/2 transform -translate-x-1/2 lg:hidden">
             <button
               onClick={close}
@@ -114,7 +94,6 @@ const PreviewMobile = ({ close, formData, setFormData }) => {
               <X color={formData?.themePalette?.palette[0]} size={30} />
             </button>
           </div>
-
         </div>
       </div>
     </>
