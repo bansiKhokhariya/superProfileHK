@@ -108,26 +108,19 @@ const Appearance = ({ formData, setFormData }) => {
         <div className='flex flex-col gap-2 mt-4'>
           <p className='text-lg' >Hard shadow</p>
           <div className="grid grid-cols-3 gap-4">
-
             <div className={`cursor-pointer pb-2 pt-1 px-2 ${formData?.buttonStyle === 'shadow' ? 'border border-indigo-500' : ''}`}>
               <div style={{ boxShadow: "5px 5px" }} className={`border py-4`} onClick={() => handleButtonSelect('shadow')}></div>
             </div>
-
             <div className={`cursor-pointer pb-2 pt-1 px-2 ${formData?.buttonStyle === 'shadow-rounded' ? 'border border-indigo-500' : ''}`}>
               <div style={{ boxShadow: "5px 5px" }} className={`border  py-4 rounded-md`} onClick={() => handleButtonSelect('shadow-rounded')}></div>
             </div>
-
             <div className={`cursor-pointer pb-2 pt-1 px-2 ${formData?.buttonStyle === 'shadow-rounded-full' ? 'border border-indigo-500' : ''}`}>
-              <div style={{ boxShadow: "5px 5px" }} className={`border  py-4 rounded-full`} onClick={() => handleUpdate('shadow-rounded-full')}></div>
+              <div style={{ boxShadow: "5px 5px" }} className={`border  py-4 rounded-full`} onClick={() => handleButtonSelect('shadow-rounded-full')}></div>
             </div>
           </div>
         </div>
-
       </div>
     </>
-
-
-
   );
 
 };

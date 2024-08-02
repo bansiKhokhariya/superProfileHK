@@ -32,6 +32,9 @@ const Profile = ({ formData, setFormData }) => {
   const [urlError, setUrlError] = useState(false);
 
   const handleSubmit = async () => {
+    if (urlError) {
+      return;
+    }
     setIsSubmitting(true);
     try {
       const linksObject = {
@@ -65,12 +68,15 @@ const Profile = ({ formData, setFormData }) => {
       toast.error(error.message)
     } finally {
       setIsSubmitting(false);
+      setUrlError('')
     }
   };
 
   const handleEditSubmit = async () => {
+    if (urlError) {
+      return;
+    }
     setIsSubmitting(true);
-
     try {
       const updatedLinks = [...formData.links];
       updatedLinks[editIndex] = { title, url };
@@ -97,6 +103,7 @@ const Profile = ({ formData, setFormData }) => {
       toast.error(error.message)
     } finally {
       setIsSubmitting(false);
+      setUrlError('')
     }
   };
 
