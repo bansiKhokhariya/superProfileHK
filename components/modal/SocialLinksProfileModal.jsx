@@ -2,7 +2,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button'
 
-const SocialLinksModal = ({ showModal, handleClose, handleFormSubmit, formData }) => {
+const SocialLinksProfileModal = ({ showModal, handleClose, handleFormSubmit, formData }) => {
+
   const initialSocialLinks = useMemo(() => ({
     instagram: '',
     twitter: '',
@@ -143,6 +144,6 @@ const SocialLinksModal = ({ showModal, handleClose, handleFormSubmit, formData }
   );
 };
 
-export default SocialLinksModal;
+export default SocialLinksProfileModal;
 
 

@@ -115,7 +115,7 @@ const FormSection = ({ showPreview, setShowPreview, formData, setFormData, produ
       });
       if (response.ok) {
         await response.json();
-        router.push(`/`);
+        router.push(`/app/payment-page`);
       } else {
         const errorData = await response.json();
         console.error('Error:', errorData);
@@ -138,7 +138,7 @@ const FormSection = ({ showPreview, setShowPreview, formData, setFormData, produ
       <div className={`sticky top-0 border-b px-4 pt-4 bg-white flex flex-col   ${!productId && 'pb-4'} `}>
         <div className=' flex justify-between items-center'>
           <div>
-            <Link href={'/'}><b>✕</b></Link>  &nbsp;  | &nbsp; New Checkout Page
+            <Link href={'/app/payment-page'}><b>✕</b></Link>  &nbsp;  | &nbsp; New Checkout Page
           </div>
           <Button size='sm' className='block lg:hidden' onClick={handlePreviewClick}>Preview</Button>
         </div>

@@ -1,23 +1,9 @@
 import React, { useEffect, useState } from 'react';
-// import { useSession } from "next-auth/react";
-import Login from '@/components/Login';
-import { magic } from '@/libs/magic';
-import { usePathname } from 'next/navigation';
+import ButtonSignin from '@/components/ButtonSignin';
 
-const SuccessPaymentBox = ({ setProductViewPage, setPaymentSuccess }) => {
-    const pathname = usePathname()
+const SuccessPaymentBox = ({ user, setProductViewPage, setPaymentSuccess }) => {
 
     const [showCrackers, setShowCrackers] = useState(true);
-
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        magic.user.isLoggedIn().then((isLoggedIn) => {
-            if (isLoggedIn) {
-                magic.user.getMetadata().then(setUser);
-            }
-        });
-    }, []);
 
     useEffect(() => {
         if (!user) {
@@ -64,7 +50,7 @@ const SuccessPaymentBox = ({ setProductViewPage, setPaymentSuccess }) => {
                 </div>
                 <p>Payment Successful</p>
                 {!user ? (
-                    <Login redirectUrl={pathname} />
+                    < ButtonSignin />
                 ) : (
                     <button className='bg-pink-500 text-white py-2 px-4 rounded-lg text-sm' onClick={handleViewProductClick}>
                         View Product

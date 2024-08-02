@@ -1,17 +1,27 @@
 // import ButtonAccount from "@/components/ButtonAccount";
+// import { useEffect } from "react";
 
+
+'use client'
 export const dynamic = "force-dynamic";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 // This is a private page: It's protected by the layout.js component which ensures the user is authenticated.
 // It's a server compoment which means you can fetch data (like the user profile) before the page is rendered.
 // See https://shipfa.st/docs/tutorials/private-page
 export default async function Dashboard() {
+
+   const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to the profile page
+    router.push('/app/payment-page');
+  }, [router]);
+
   return (
-    <main className="min-h-screen p-8 pb-24">
-      <section className="max-w-xl mx-auto space-y-8">
-        {/* <ButtonAccount /> */}
-        <h1 className="text-3xl md:text-4xl font-extrabold">Dashboard</h1>
-      </section>
-    </main>
+    <h1>bansi</h1>
   );
 }
+
+

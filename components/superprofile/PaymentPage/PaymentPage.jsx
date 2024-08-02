@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import Login from '@/components/Login';
+// import Login from '@/components/Login';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input"
@@ -19,8 +19,10 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel";
+import ButtonAccount from '@/components/ButtonAccount';
+import ButtonSignin from '@/components/ButtonSignin';
 
-const PaymentPage = ({ paymentData, setProductViewPage, handleCloseButton, handlePaymentButton, paymentPage, makePayment, formData, isVisibleTermsCondition, handleInputChange, discountPercentage, renderSocialIcon, customAmountError, toggleVisibleTermsCondition }) => {
+const PaymentPage = ({ user, paymentData, setProductViewPage, handleCloseButton, handlePaymentButton, paymentPage, makePayment, formData, isVisibleTermsCondition, handleInputChange, discountPercentage, renderSocialIcon, customAmountError, toggleVisibleTermsCondition }) => {
     const pathname = usePathname()
 
     const commanPartMainContainer = () => {
@@ -209,7 +211,7 @@ const PaymentPage = ({ paymentData, setProductViewPage, handleCloseButton, handl
                     </div>
                     <div className='w-full md:w-1/3' style={{ background: formData.color }} >
                         <div className='flex justify-end p-3'>
-                            <Login redirectUrl={pathname} />
+                            {user ?  <ButtonAccount /> :  <ButtonSignin />}
                         </div>
                         <div className='p-2'>
                             <div
@@ -220,19 +222,19 @@ const PaymentPage = ({ paymentData, setProductViewPage, handleCloseButton, handl
                                     Guaranteed safe & secure payment
                                     <div className='flex items-center justify-around pt-3'>
                                         <div>
-                                            <Image src='/images/cards/visa.webp' width={50} height={50} className='md:w-30 md:h-30' alt='cardImage'/>
+                                            <Image src='/images/cards/visa.webp' width={50} height={50} className='md:w-30 md:h-30' alt='cardImage' />
                                         </div>
                                         <div>
-                                            <Image src='/images/cards/googlepay.webp' width={50} height={50} className='md:w-30 md:h-30' alt='cardImage'/>
+                                            <Image src='/images/cards/googlepay.webp' width={50} height={50} className='md:w-30 md:h-30' alt='cardImage' />
                                         </div>
                                         <div>
-                                            <Image src='/images/cards/mastercard.webp' width={50} height={50} className='md:w-30 md:h-30' alt='cardImage'/>
+                                            <Image src='/images/cards/mastercard.webp' width={50} height={50} className='md:w-30 md:h-30' alt='cardImage' />
                                         </div>
                                         <div>
-                                            <Image src='/images/cards/phonepe.webp' width={50} height={50} className='md:w-30 md:h-30' alt='cardImage'/>
+                                            <Image src='/images/cards/phonepe.webp' width={50} height={50} className='md:w-30 md:h-30' alt='cardImage' />
                                         </div>
                                         <div>
-                                            <Image src='/images/cards/paytm.webp' width={50} height={50} className='md:w-30 md:h-30' alt='cardImage'/>
+                                            <Image src='/images/cards/paytm.webp' width={50} height={50} className='md:w-30 md:h-30' alt='cardImage' />
                                         </div>
                                     </div>
                                 </div>

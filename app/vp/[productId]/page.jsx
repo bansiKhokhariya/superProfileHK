@@ -5,9 +5,11 @@ import ViewProduct from '@/components/superprofile/PaymentPage/ViewProduct'
 import SuccessPaymentBox from '@/components/superprofile/PaymentPage/SuccessPaymentBox'
 import toast from 'react-hot-toast'
 import renderSocialIcon from '@/utils/renderSocialIcon';
-import { magic } from '@/libs/magic';
+// import { magic } from '@/libs/magic';
+import { useSession } from "next-auth/react";
 
 const Page = ({ params }) => {
+    const { data: session, status } = useSession();
     const [formData, setFormData] = useState({
         paymentPageEmail: '',
     });
@@ -18,7 +20,7 @@ const Page = ({ params }) => {
     const [paymentProductId, setPaymentProductId] = useState()
     const [paymentPage, setPaymentPage] = useState(0)
     const [paymentData, setPaymentData] = useState('')
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState('');
 
     /* global fbq */
     useEffect(() => {
@@ -70,11 +72,20 @@ const Page = ({ params }) => {
     };
 
     useEffect(() => {
-        magic.user.isLoggedIn().then((isLoggedIn) => {
-            if (isLoggedIn) {
-                magic.user.getMetadata().then(setUser);
+        if (status === 'authenticated') {
+            setUser(session.user);
+            const localStorageValue = localStorage.getItem('loginPaymentBox');
+            if (localStorageValue === 'true') {
+                setProductViewPage(true);
             }
-        });
+        }
+    }, [session, status]);
+
+    useEffect(() => {
+        const localStorageValue = localStorage.getItem('loginPaymentBox');
+        if (localStorageValue === 'true') {
+            setProductViewPage(true);
+        }
     }, []);
 
     useEffect(() => {
@@ -270,13 +281,6 @@ const Page = ({ params }) => {
     };
 
     useEffect(() => {
-        const localStorageValue = localStorage.getItem('loginPaymentBox');
-        if (localStorageValue === 'true') {
-            setProductViewPage(true);
-        }
-    }, []);
-
-    useEffect(() => {
         const fetchPaymentData = async (email) => {
             try {
                 const response = await fetch(`/api/superProfile/payment/getbyUser?email=${email}&productId=${params.productId}`, {
@@ -295,9 +299,10 @@ const Page = ({ params }) => {
 
     return (
         <>
-            {paymentSuccess && <SuccessPaymentBox setProductViewPage={setProductViewPage} setPaymentSuccess={setPaymentSuccess} />}
+            {paymentSuccess && <SuccessPaymentBox setProductViewPage={setProductViewPage} setPaymentSuccess={setPaymentSuccess}  user={user}/>}
             {productViewPage && <ViewProduct setProductViewPage={setProductViewPage} formData={formData} />}
             {!productViewPage && <PaymentPage
+                user={user}
                 setProductViewPage={setProductViewPage}
                 paymentData={paymentData}
                 formData={formData}
