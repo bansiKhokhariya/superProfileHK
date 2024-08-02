@@ -71,7 +71,7 @@ const Appearance = ({ formData, setFormData }) => {
             <div
               key={index}
               className={`cursor-pointer p-4 border rounded-xl shadow-md hover:shadow-lg transition duration-300 ease-in-out flex flex-col gap-2 items-center justify-center
-              ${formData.themePalette?.name === theme.name ? 'border-indigo-500' : 'border-gray-300'}
+              ${formData?.themePalette?.name === theme.name ? 'border-indigo-500' : 'border-gray-300'}
             `}
               onClick={() => handleThemeSelect(theme)}
             >
@@ -94,13 +94,13 @@ const Appearance = ({ formData, setFormData }) => {
         <div className='flex flex-col gap-2'>
           <p className='text-lg' >Fill</p>
           <div className="grid grid-cols-3 gap-4">
-            <div className={`cursor-pointer p-1 ${formData.buttonStyle === 'normal' ? 'border border-indigo-500' : ''}`}>
+            <div className={`cursor-pointer p-1 ${formData?.buttonStyle === 'normal' ? 'border border-indigo-500' : ''}`}>
               <div className={`border py-4 bg-black`} onClick={() => handleButtonSelect('normal')}></div>
             </div>
-            <div className={`cursor-pointer p-1 ${formData.buttonStyle === 'rounded-md' ? 'border border-indigo-500' : ''}`}>
+            <div className={`cursor-pointer p-1 ${formData?.buttonStyle === 'rounded-md' ? 'border border-indigo-500' : ''}`}>
               <div className={`border py-4 bg-black rounded-md`} onClick={() => handleButtonSelect('rounded-md')}></div>
             </div>
-            <div className={`cursor-pointer p-1 ${formData.buttonStyle === 'rounded-full' ? 'border border-indigo-500' : ''}`}>
+            <div className={`cursor-pointer p-1 ${formData?.buttonStyle === 'rounded-full' ? 'border border-indigo-500' : ''}`}>
               <div className={`border py-4 bg-black rounded-full`} onClick={() => handleButtonSelect('rounded-full')}></div>
             </div>
           </div>
@@ -109,15 +109,15 @@ const Appearance = ({ formData, setFormData }) => {
           <p className='text-lg' >Hard shadow</p>
           <div className="grid grid-cols-3 gap-4">
 
-            <div className={`cursor-pointer pb-2 pt-1 px-2 ${formData.buttonStyle === 'shadow' ? 'border border-indigo-500' : ''}`}>
+            <div className={`cursor-pointer pb-2 pt-1 px-2 ${formData?.buttonStyle === 'shadow' ? 'border border-indigo-500' : ''}`}>
               <div style={{ boxShadow: "5px 5px" }} className={`border py-4`} onClick={() => handleButtonSelect('shadow')}></div>
             </div>
 
-            <div className={`cursor-pointer pb-2 pt-1 px-2 ${formData.buttonStyle === 'shadow-rounded' ? 'border border-indigo-500' : ''}`}>
+            <div className={`cursor-pointer pb-2 pt-1 px-2 ${formData?.buttonStyle === 'shadow-rounded' ? 'border border-indigo-500' : ''}`}>
               <div style={{ boxShadow: "5px 5px" }} className={`border  py-4 rounded-md`} onClick={() => handleButtonSelect('shadow-rounded')}></div>
             </div>
 
-            <div className={`cursor-pointer pb-2 pt-1 px-2 ${formData.buttonStyle === 'shadow-rounded-full' ? 'border border-indigo-500' : ''}`}>
+            <div className={`cursor-pointer pb-2 pt-1 px-2 ${formData?.buttonStyle === 'shadow-rounded-full' ? 'border border-indigo-500' : ''}`}>
               <div style={{ boxShadow: "5px 5px" }} className={`border  py-4 rounded-full`} onClick={() => handleUpdate('shadow-rounded-full')}></div>
             </div>
           </div>

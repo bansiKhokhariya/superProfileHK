@@ -20,6 +20,7 @@ import {
 import toast from 'react-hot-toast';
 import { Copy } from 'lucide-react';
 import Image from 'next/image'
+import isUrl from 'is-url';
 
 const Profile = ({ formData, setFormData }) => {
   const [title, setTitle] = useState('');
@@ -28,6 +29,7 @@ const Profile = ({ formData, setFormData }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSocialModal, setShowSocialModal] = useState(false);
   const [showLinkModal, setShowLinkModal] = useState(false);
+  const [urlError, setUrlError] = useState(false);
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -184,6 +186,20 @@ const Profile = ({ formData, setFormData }) => {
       });
   };
 
+  const validateLink = (url) => {
+    if (!isUrl(url)) {
+      setUrlError('Enter a valid link');
+    } else {
+      setUrlError('');
+    }
+  };
+
+  const handleUrlChange = (e) => {
+    const newLink = e.target.value;
+    setUrl(newLink);
+    validateLink(newLink);
+  };
+
   return (
     <div className='bg-white p-5 rounded-xl flex flex-col gap-4 items-center'>
       <div className='border rounded-full bg-gray-200 p-1'>
@@ -218,10 +234,12 @@ const Profile = ({ formData, setFormData }) => {
                   type="text"
                   placeholder="URL"
                   value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  className='mt-4 mb-4'
+                  // onChange={(e) => setUrl(e.target.value)}
+                  onChange={handleUrlChange}
+                  className='mt-4 mb-2'
                   required
                 />
+                <p className='text-red-500'>{urlError && 'Please enter valid Url'}</p>
                 <div className='mt-3'>
                   <Button type="submit" disabled={isSubmitting} onClick={editIndex !== null ? handleEditSubmit : handleSubmit}>
                     {isSubmitting ? (editIndex !== null ? 'Updating...' : 'Creating...') : (editIndex !== null ? 'Update' : 'Create')}
