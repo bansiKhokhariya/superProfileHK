@@ -175,9 +175,9 @@ import { User } from 'lucide-react';
 import renderSocialIcon from '@/utils/renderSocialIcon';
 import Script from 'next/script';
 import { useRouter } from 'next/navigation';
+import Head from 'next/head';
 
 const Page = ({ params }) => {
-
 
     const { query } = useRouter();
     const [formData, setFormData] = useState(null);
@@ -239,18 +239,17 @@ const Page = ({ params }) => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
-
-
-            {!query?.isIframe ? (
-                <Script
-                    defer
-                    src="https://unpkg.com/@tinybirdco/flock.js"
-                    data-host="https://api.tinybird.co"
-                    data-token={process.env.NEXT_PUBLIC_DATA_TOKEN}
-                />
-            ) : null}
-
+        <>
+            <Head>
+                <title> @{formData.handle} | HKSUPERPROFILE</title>
+            </Head>
+            {/* {!query?.isIframe ? ( */}
+            <Script defer
+                src="https://unpkg.com/@tinybirdco/flock.js"
+                data-host="https://api.tinybird.co"
+                data-token="p.eyJ1IjogImVkOTgwZGM3LTc3M2YtNDBkYy1hZmU5LTU0Y2VhNDMzYmFlYyIsICJpZCI6ICI3OGRkNmU1ZC01ZmNkLTQxNzctODYwNC00MWE4ZDg2MzY3YzUiLCAiaG9zdCI6ICJldV9zaGFyZWQifQ.4zM2j63lNeurkZla70fbLUcmQYSU-ye7vU2fJIn1Nv0"
+            />
+            {/* ) : null} */}
             <div
                 className="absolute inset-0 z-10 flex justify-start items-center flex-col px-5 sm:px-8 md:px-16 lg:px-[300px] xl:px-[500px] py-10"
                 style={{
@@ -277,8 +276,6 @@ const Page = ({ params }) => {
                     {formData?.name ? <p>{formData?.name}</p> : <p>{formData?.handle}</p>}
                 </div>
                 <p className="mt-2 text-center">{formData?.bio}</p>
-
-
 
                 {formData?.socialLinks && (
                     <div className="flex flex-wrap mt-2">
@@ -338,7 +335,7 @@ const Page = ({ params }) => {
                     <p>No links available</p>
                 )}
             </div>
-        </div>
+        </>
     );
 };
 

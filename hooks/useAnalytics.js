@@ -9,9 +9,7 @@ const useAnalytics = (filter, handle) => {
       const response = await axios.get(
         `/api/analytics/views?handle=${handle}&filter=${filter}`
       );
-
-      console.log("response.data",response.data);
-      return response.data;
+      return response.data.analytics_formatted;
     },
     enabled: !!handle,
     onError: () => {

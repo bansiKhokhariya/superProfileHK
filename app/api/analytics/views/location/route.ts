@@ -1,58 +1,96 @@
-import axios from 'axios';
-import { NextRequest, NextResponse } from 'next/server';
+// import axios from 'axios';
+// import { NextRequest, NextResponse } from 'next/server';
 
-// export default async function handler(req, res) {
-//   if (req.method !== 'GET') {
-//     return res.status(405).end();
-//   }
+// export async function GET(req: NextRequest, res: NextResponse) {
+//     try {
+//         const { searchParams } = new URL(req.url);
+//         const handle = searchParams.get('handle');
+//         const endpoint = 'https://api.tinybird.co/v0/pipes/top_locations.json';
 
-//   try {
-//     const {handle} = req.query;
-//     const endpoint =
-//       'https://api.tinybird.co/v0/pipes/libre_location_tracking.json';
+//         if (!handle || typeof handle !== 'string') {
+//             return NextResponse.json({
+//                 message: 'Handle type not valid'
+//             }, { status: 404 });
+//         }
 
-//     if (!handle || typeof handle !== 'string') {
-//       return res.status(404).end();
+//         const response = await axios.get(
+//             `${endpoint}?limit=50&token=${process.env.ANALYTICS_TOKEN}`
+//         );
+
+//         return NextResponse.json(
+//             { analytics: response.data.data },
+//             { status: 200 }
+//         );
+//     } catch (error: any) {
+//         console.log("Error fetching analytics:", error.message);
+//         return NextResponse.json(
+//             { message: "An error occurred", error: error.message },
+//             { status: 500 }
+//         );
 //     }
-
-//     const analytics = await axios.get(
-//       `${endpoint}?token=${process.env.LOCATION_ANALYTICS_TOKEN}&handle=/${handle}`
-//     );
-
-//     return res.status(200).json(analytics.data.data);
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).end();
-//   }
 // }
 
 
-export async function GET(req: NextRequest, res: NextResponse) {
+import axios from 'axios';
+import { NextRequest, NextResponse } from 'next/server';
 
-    console.log('in api location');
+interface AnalyticsData {
+    timestamp: string;
+    action: string;
+    version: string;
+    session_id: string;
+    location: string;
+    referrer: string;
+    pathname: string;
+    href: string;
+    device: string;
+    browser: string;
+}
+
+interface LocationVisits {
+    location: string;
+    visits: number;
+}
+
+export async function GET(req: NextRequest, res: NextResponse) {
     try {
         const { searchParams } = new URL(req.url);
         const handle = searchParams.get('handle');
-
-
-        const endpoint = 'https://api.us-east.tinybird.co/v0/pipes/top_locations.json';
-
+        const endpoint = 'https://api.tinybird.co/v0/pipes/analytics_hits.json';
         if (!handle || typeof handle !== 'string') {
-            return NextResponse.json({
-                message: 'Handle type not valid'
-            }, { status: 404 });
+            return NextResponse.json(
+                {
+                    message: 'Handle type not valid',
+                },
+                { status: 404 }
+            );
         }
-
-        const analytics = await axios.get(
-            `${endpoint}?token=${process.env.LOCATION_ANALYTICS_TOKEN}&handle=/${handle}`
-          );
-        
-        return NextResponse.json({
-            analytics
-        }, { status: 200 });
+        const response = await axios.get<{ data: AnalyticsData[] }>(
+            `${endpoint}?token=${process.env.ANALYTICS_TOKEN}`
+        );
+        const analyticsData = response.data.data;
+        // Filter data for the specific handle
+        const filteredData = analyticsData.filter(
+            (entry) => entry.pathname === `/${handle}`
+        );
+        // Count visits by location
+        const locationCounts: Record<string, number> = {};
+        filteredData.forEach((entry) => {
+            const location = entry.location;
+            if (locationCounts[location]) {
+                locationCounts[location]++;
+            } else {
+                locationCounts[location] = 1;
+            }
+        });
+        // Convert to desired format for locations
+        const locationVisits: LocationVisits[] = Object.entries(locationCounts).map(
+            ([location, visits]) => ({ location, visits })
+        );
+        return NextResponse.json(locationVisits, { status: 200 });
     } catch (error: any) {
         return NextResponse.json(
-            { message: "An error occurred", error: error.message },
+            { message: 'An error occurred', error: error.message },
             { status: 500 }
         );
     }

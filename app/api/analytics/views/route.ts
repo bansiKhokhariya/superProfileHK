@@ -19,7 +19,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     const handle = searchParams.get('handle');
     const filter = searchParams.get('filter');
 
-    const endpoint = 'https://api.tinybird.co/v0/pipes/page_views.json';
+    const endpoint = 'https://api.tinybird.co/v0/pipes/trend.json';
 
     if (!handle || typeof handle !== 'string') {
       return NextResponse.json({
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     }
 
     const response = await axios.get<{ data: AnalyticsData[] }>(
-      `${endpoint}?token=${process.env.ANALYTICS_TOKEN}&filter=${filter}&handle=/${handle}`
+      `${endpoint}?token=${process.env.ANALYTICS_TOKEN}&date_from=2024-08-03&date_to=2024-08-03&handle=/${handle}`
     );
 
     const analytics = response.data;
@@ -47,9 +47,10 @@ export async function GET(req: NextRequest, res: NextResponse) {
       }));
     }
 
-    return NextResponse.json({
-      analytics_formatted
-    }, { status: 200 });
+    return NextResponse.json(
+      { analytics_formatted: analytics_formatted },
+      { status: 200 }
+    );
   } catch (error: any) {
     return NextResponse.json(
       { message: "An error occurred", error: error.message },
@@ -79,140 +80,439 @@ function formatTime(dateStr: string): string {
 }
 
 
-//   if (req.method !== "POST" && req.method !== "GET") {
-//     return res.status(405).end();
-//   }
+// import axios from 'axios';
+// import { NextRequest, NextResponse } from 'next/server';
 
+// interface AnalyticsData {
+//   t: string;
+//   visits: number;
+// }
+
+// interface FormattedAnalyticsData {
+//   t: string;
+//   visits: number;
+// }
+
+// export async function GET(req: NextRequest, res: NextResponse) {
 //   try {
-//     const { id } = req.query;
+//     const { searchParams } = new URL(req.url);
+//     const handle = searchParams.get('handle');
+//     const filter = searchParams.get('filter');
 
-//     if (!id || typeof id !== "string") {
-//       return res.status(404).end();
-//       //   throw new Error("Invalid ID");
+//     if (!handle || typeof handle !== 'string') {
+//       return NextResponse.json({
+//         message: 'Handle type not valid',
+//       }, { status: 404 });
 //     }
 
-//     if (req.method == "GET") {
-//       const { filterOption, id } = req.query;
-//       const viewsData = await getPageViewsByDuration(id, filterOption);
+//     // Calculate date range based on filter
+//     const { dateFrom, dateTo } = calculateDateRange(filter);
 
-//       return res.status(200).json(viewsData);
-//     } else if (req.method == "POST") {
-//       await db.pageView.create({
-//         data: {
-//           userId: id,
-//           timestamp: new Date(),
+//     const endpoint = 'https://api.tinybird.co/v0/pipes/trend.json';
+//     const response = await axios.get<{ data: AnalyticsData[] }>(
+//       `${endpoint}?token=${process.env.ANALYTICS_TOKEN}&date_from=${dateFrom}&date_to=${dateTo}&handle=${handle}`
+//     );
+
+//     const analytics = response.data;
+
+//     const analytics_formatted: FormattedAnalyticsData[] = analytics.data.map(({ t, visits }: AnalyticsData) => ({
+//       t: filter !== 'last_24_hours' && filter !== 'last_hour' ? formatDate(t) : formatTime(t),
+//       visits,
+//     }));
+
+//     return NextResponse.json(
+//       { analytics_formatted: analytics_formatted },
+//       { status: 200 }
+//     );
+//   } catch (error: any) {
+//     return NextResponse.json(
+//       { message: "An error occurred", error: error.message },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+// function calculateDateRange(filter: string | null) {
+//   const today = new Date();
+//   let dateFrom: string, dateTo: string;
+
+//   switch (filter) {
+//     case 'today':
+//       dateFrom = formatDateForAPI(today);
+//       dateTo = formatDateForAPI(today);
+//       break;
+
+//     case 'yesterday':
+//       const yesterday = new Date(today);
+//       yesterday.setDate(today.getDate() - 1);
+//       dateFrom = formatDateForAPI(yesterday);
+//       dateTo = formatDateForAPI(yesterday);
+//       break;
+
+//     case 'last_7_days':
+//       const sevenDaysAgo = new Date(today);
+//       sevenDaysAgo.setDate(today.getDate() - 7);
+//       dateFrom = formatDateForAPI(sevenDaysAgo);
+//       dateTo = formatDateForAPI(today);
+//       break;
+
+//     case 'last_24_hours':
+//       const last24Hours = new Date(today);
+//       last24Hours.setHours(today.getHours() - 24);
+//       dateFrom = formatDateForAPI(last24Hours);
+//       dateTo = formatDateForAPI(today);
+//       break;
+
+//     case 'last_30_days':
+//       const thirtyDaysAgo = new Date(today);
+//       thirtyDaysAgo.setDate(today.getDate() - 30);
+//       dateFrom = formatDateForAPI(thirtyDaysAgo);
+//       dateTo = formatDateForAPI(today);
+//       break;
+
+//     default:
+//       // Default to today's date if filter is invalid or not provided
+//       dateFrom = formatDateForAPI(today);
+//       dateTo = formatDateForAPI(today);
+//       break;
+//   }
+
+//   return { dateFrom, dateTo };
+// }
+
+// function formatDateForAPI(date: Date): string {
+//   return date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+// }
+
+// function formatDate(dateStr: string): string {
+//   const dateObj = new Date(dateStr);
+//   const monthNames = [
+//     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+//     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+//   ];
+//   const month = monthNames[dateObj.getMonth()];
+//   const day = dateObj.getDate();
+//   return `${month} ${day}`;
+// }
+
+// function formatTime(dateStr: string): string {
+//   const dateObj = new Date(dateStr);
+//   let hours = dateObj.getHours();
+//   const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+//   const amPM = hours >= 12 ? 'PM' : 'AM';
+//   hours = hours % 12 || 12; // Convert to 12-hour clock
+//   return `${hours}:${minutes} ${amPM}`;
+// }
+
+
+
+
+
+
+
+
+
+
+
+// import axios from 'axios';
+// import { NextRequest, NextResponse } from 'next/server';
+
+// interface AnalyticsData {
+//   timestamp: string;
+//   action: string;
+//   version: string;
+//   session_id: string;
+//   location: string;
+//   referrer: string;
+//   pathname: string;
+//   href: string;
+//   device: string;
+//   browser: string;
+// }
+
+// interface FormattedAnalyticsData {
+//   t: string; // Formatted time
+//   visits: number; // Number of visits
+// }
+
+// export async function GET(req: NextRequest) {
+//   try {
+//     const { searchParams } = new URL(req.url);
+//     const handle = searchParams.get('handle');
+//     const filter = searchParams.get('filter');
+
+//     if (!handle || typeof handle !== 'string') {
+//       return NextResponse.json(
+//         {
+//           message: 'Handle type not valid',
 //         },
-//       });
-
-//       return res.status(200).json({ msg: "Visit tracked" });
+//         { status: 404 }
+//       );
 //     }
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(400).end();
+
+//     // Calculate date range based on filter
+//     const { dateFrom, dateTo } = calculateDateRange(filter);
+
+//     const endpoint = 'https://api.tinybird.co/v0/pipes/analytics_hits.json';
+//     const response = await axios.get<{ data: AnalyticsData[] }>(
+//       `${endpoint}?token=${process.env.ANALYTICS_TOKEN}&date_from=${dateFrom}&date_to=${dateTo}&handle=${handle}`
+//     );
+
+//     const data = response.data.data;
+
+//     // Filter by handle and time range
+//     const filteredData = data.filter(entry => entry.pathname === `/${handle}`);
+
+//     // Count visits per time slot
+//     const timeCounts = filteredData.reduce((acc, { timestamp }) => {
+//       const timeSlot = formatTime(timestamp);
+//       if (!acc[timeSlot]) {
+//         acc[timeSlot] = 0;
+//       }
+//       acc[timeSlot]++;
+//       return acc;
+//     }, {} as Record<string, number>);
+
+//     // Format data into the desired structure
+//     const analytics_formatted: FormattedAnalyticsData[] = Object.entries(timeCounts).map(([t, visits]) => ({
+//       t,
+//       visits,
+//     }));
+
+//     return NextResponse.json(analytics_formatted, { status: 200 });
+//   } catch (error: any) {
+//     return NextResponse.json(
+//       { message: "An error occurred", error: error.message },
+//       { status: 500 }
+//     );
 //   }
 // }
 
-// async function getPageViewsByDuration(userId, period) {
-//   const currentDate = new Date();
-//   const startDate = new Date();
+// function calculateDateRange(filter: string | null) {
+//   const today = new Date();
+//   let dateFrom: string, dateTo: string;
 
-//   if (period === "1hr") {
-//     startDate.setHours(currentDate.getHours() - 1);
-//   } else if (period === "7d") {
-//     startDate.setDate(currentDate.getDate() - 7);
-//   } else if (period === "30d") {
-//     startDate.setMonth(currentDate.getMonth() - 1);
+//   switch (filter) {
+//     case 'today':
+//       dateFrom = formatDateForAPI(today);
+//       dateTo = formatDateForAPI(today);
+//       break;
+
+//     case 'yesterday':
+//       const yesterday = new Date(today);
+//       yesterday.setDate(today.getDate() - 1);
+//       dateFrom = formatDateForAPI(yesterday);
+//       dateTo = formatDateForAPI(yesterday);
+//       break;
+
+//     case 'last_7_days':
+//       const sevenDaysAgo = new Date(today);
+//       sevenDaysAgo.setDate(today.getDate() - 7);
+//       dateFrom = formatDateForAPI(sevenDaysAgo);
+//       dateTo = formatDateForAPI(today);
+//       break;
+
+//     case 'last_24_hours':
+//       const last24Hours = new Date(today);
+//       last24Hours.setHours(today.getHours() - 24);
+//       dateFrom = formatDateForAPI(last24Hours);
+//       dateTo = formatDateForAPI(today);
+//       break;
+
+//     case 'last_30_days':
+//       const thirtyDaysAgo = new Date(today);
+//       thirtyDaysAgo.setDate(today.getDate() - 30);
+//       dateFrom = formatDateForAPI(thirtyDaysAgo);
+//       dateTo = formatDateForAPI(today);
+//       break;
+
+//     default:
+//       dateFrom = formatDateForAPI(today);
+//       dateTo = formatDateForAPI(today);
+//       break;
 //   }
 
-//   const pageViews = await db.pageView.findMany({
-//     where: {
-//       userId: userId,
-//       timestamp: {
-//         gte: startDate,
-//         lt: currentDate,
-//       },
-//     },
-//     orderBy: {
-//       timestamp: "asc",
-//     },
-//   });
-
-//   return transformDataForBarGraph(pageViews, period);
+//   return { dateFrom, dateTo };
 // }
 
-// function transformDataForBarGraph(pageViews, period) {
-//   const data = [];
+// function formatDateForAPI(date: Date): string {
+//   return date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+// }
 
-//   const aggregation = {
-//     "1hr": {
-//       // Aggregate by hour
-//       format: "yyyy-MM-dd HH:00",
-//       step: 60 * 60 * 1000, // 1 hour in milliseconds
-//       previousCount: 2,
-//       nextCount: 2,
-//     },
-//     "7d": {
-//       // Aggregate by day
-//       format: "yyyy-MM-dd",
-//       step: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-//       previousCount: 6, // 6 previous days to make it total 7 days
-//       nextCount: 0, // No next days as it covers the range till today
-//     },
-//     "30d": {
-//       // Aggregate by day
-//       format: "yyyy-MM-dd",
-//       step: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-//       previousCount: 29, // 29 previous days to make it total 30 days
-//       nextCount: 0, // No next days as it covers the range till today
-//     },
-//   };
+// function formatTime(dateStr: string): string {
+//   const dateObj = new Date(dateStr);
 
-//   const { format, step, previousCount, nextCount } = aggregation[period];
 
-//   const currentDate = new Date();
+// console.log("dateObj",dateObj);
 
-//   // Calculate the start date based on the period
-//   const startDate = new Date(
-//     currentDate.getTime() - (previousCount + nextCount + 1) * step
-//   );
 
-//   // Generate x-values for the previous days
-//   for (let i = previousCount; i >= 0; i--) {
-//     const timestamp = new Date(startDate.getTime() + step * i);
-//     const x = formatDate(timestamp, format);
-//     data.push({ x, y: 0 });
+//   if (isNaN(dateObj.getTime())) {
+//     console.error("Invalid date format:", dateStr);
+//     return "Invalid Date";
 //   }
 
-//   // Aggregate the actual data points
-//   for (const pageView of pageViews) {
-//     const timestamp = new Date(pageView.timestamp);
-//     const x = formatDate(timestamp, format);
+//   let hours = dateObj.getHours();
+//   const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+//   const amPM = hours >= 12 ? 'PM' : 'AM';
+//   hours = hours % 12 || 12; // Convert to 12-hour clock
+//   return `${hours}:${minutes} ${amPM}`;
+// }
 
-//     const existingData = data.find(item => item.x === x);
-//     if (existingData) {
-//       existingData.y++;
-//     } else {
-//       data.push({ x, y: 1 });
+
+// import axios from 'axios';
+// import { NextRequest, NextResponse } from 'next/server';
+
+// interface AnalyticsData {
+//   timestamp: string;
+//   action: string;
+//   version: string;
+//   session_id: string;
+//   location: string;
+//   referrer: string;
+//   pathname: string;
+//   href: string;
+//   device: string;
+//   browser: string;
+// }
+
+// interface FormattedAnalyticsData {
+//   t: string; // Formatted time
+//   visits: number; // Number of visits
+// }
+
+// export async function GET(req: NextRequest) {
+//   try {
+//     const { searchParams } = new URL(req.url);
+//     const handle = searchParams.get('handle');
+//     const filter = searchParams.get('filter');
+
+//     if (!handle || typeof handle !== 'string') {
+//       return NextResponse.json(
+//         {
+//           message: 'Handle type not valid',
+//         },
+//         { status: 404 }
+//       );
 //     }
+
+//     // Calculate date range based on filter
+//     const { dateFrom, dateTo } = calculateDateRange(filter);
+
+//     const endpoint = 'https://api.tinybird.co/v0/pipes/analytics_hits.json';
+//     const response = await axios.get<{ data: AnalyticsData[] }>(
+//       `${endpoint}?token=${process.env.ANALYTICS_TOKEN}&date_from=${dateFrom}&date_to=${dateTo}&handle=${handle}`
+//     );
+
+//     const data = response.data.data;
+
+//     // Filter by handle and time range
+//     const filteredData = data.filter(entry => entry.pathname === `/${handle}`);
+
+//     // Define all time slots
+//     const allTimeSlots = generateAllTimeSlots();
+
+//     // Count visits per time slot
+//     const timeCounts: Record<string, number> = {};
+
+//     filteredData.forEach(({ timestamp }) => {
+//       const timeSlot = formatTime(timestamp);
+//       if (!timeCounts[timeSlot]) {
+//         timeCounts[timeSlot] = 0;
+//       }
+//       timeCounts[timeSlot]++;
+//     });
+
+//     // Create time slot data including missing slots
+//     const analyticsByTime: FormattedAnalyticsData[] = allTimeSlots.map(timeSlot => ({
+//       t: timeSlot,
+//       visits: timeCounts[timeSlot] || 0,
+//     }));
+
+//     return NextResponse.json({
+//       timeSlots: analyticsByTime
+//     }, { status: 200 });
+
+//   } catch (error: any) {
+//     return NextResponse.json(
+//       { message: "An error occurred", error: error.message },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+// function calculateDateRange(filter: string | null) {
+//   const today = new Date();
+//   let dateFrom: string, dateTo: string;
+
+//   switch (filter) {
+//     case 'today':
+//       dateFrom = formatDateForAPI(today);
+//       dateTo = formatDateForAPI(today);
+//       break;
+
+//     case 'yesterday':
+//       const yesterday = new Date(today);
+//       yesterday.setDate(today.getDate() - 1);
+//       dateFrom = formatDateForAPI(yesterday);
+//       dateTo = formatDateForAPI(yesterday);
+//       break;
+
+//     case 'last_7_days':
+//       const sevenDaysAgo = new Date(today);
+//       sevenDaysAgo.setDate(today.getDate() - 7);
+//       dateFrom = formatDateForAPI(sevenDaysAgo);
+//       dateTo = formatDateForAPI(today);
+//       break;
+
+//     case 'last_24_hours':
+//       const last24Hours = new Date(today);
+//       last24Hours.setHours(today.getHours() - 24);
+//       dateFrom = formatDateForAPI(last24Hours);
+//       dateTo = formatDateForAPI(today);
+//       break;
+
+//     case 'last_30_days':
+//       const thirtyDaysAgo = new Date(today);
+//       thirtyDaysAgo.setDate(today.getDate() - 30);
+//       dateFrom = formatDateForAPI(thirtyDaysAgo);
+//       dateTo = formatDateForAPI(today);
+//       break;
+
+//     default:
+//       dateFrom = formatDateForAPI(today);
+//       dateTo = formatDateForAPI(today);
+//       break;
 //   }
 
-//   // Sort the data array by x-values in ascending order
-//   data.sort((a, b) => new Date(a.x) - new Date(b.x));
-
-//   return data;
+//   return { dateFrom, dateTo };
 // }
 
-// function formatDate(date, format) {
-//   const year = date.getFullYear();
-//   const month = String(date.getMonth() + 1).padStart(2, "0");
-//   const day = String(date.getDate()).padStart(2, "0");
-//   const hours = String(date.getHours()).padStart(2, "0");
-//   const minutes = String(date.getMinutes()).padStart(2, "0");
-
-//   return format
-//     .replace("yyyy", year)
-//     .replace("MM", month)
-//     .replace("dd", day)
-//     .replace("HH", hours)
-//     .replace("mm", minutes);
+// function formatDateForAPI(date: Date): string {
+//   return date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
 // }
+
+// function generateAllTimeSlots(): string[] {
+//   const slots = [];
+//   for (let hour = 0; hour < 24; hour++) {
+//     const time = new Date();
+//     time.setHours(hour, 0, 0, 0);
+//     const formattedTime = formatTime(time.toISOString());
+//     slots.push(formattedTime);
+//   }
+//   return slots;
+// }
+
+// function formatTime(dateStr: string): string {
+//   const dateObj = new Date(dateStr);
+//   if (isNaN(dateObj.getTime())) {
+//     console.error("Invalid date format:", dateStr);
+//     return "Invalid Date";
+//   }
+
+//   let hours = dateObj.getHours();
+//   const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+//   const amPM = hours >= 12 ? 'PM' : 'AM';
+//   hours = hours % 12 || 12; // Convert to 12-hour clock
+//   return `${hours}:${minutes} ${amPM}`;
+// }
+

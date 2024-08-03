@@ -41,22 +41,23 @@ export function Analytics(currentUser) {
   const { data: deviceAnalytics } = useDeviceAnalytics(currentUser?.currentUser?.handle);
 
   return (
-    <>
-      <div className="flex w-full items-center justify-between">
+    <div className='flex flex-col justify-center items-center'>
+      <div className="w-1/2 pl-4 pr-4 overflow-auto">
         <h3 className="text-xl font-semibold">Analytics</h3>
-        <Select
-          onChange={(option) => setFilter(option.value)}
-          className="w-[170px]"
-          defaultValue={options[0]}
-          options={options}
-        />
+        <div className='flex justify-end'>
+          <Select
+            onChange={(option) => setFilter(option.value)}
+            className="w-[170px]"
+            defaultValue={options[0]}
+            options={options}
+          />
+        </div>
+        <Chart analytics={visitAnalytics} />
+        <DeviceStats analytics={deviceAnalytics} />
+        <LocationStats analytics={locationAnalytics} />
       </div>
-      <Chart analytics={visitAnalytics} />
-      <DeviceStats analytics={deviceAnalytics} />
-      <LocationStats analytics={locationAnalytics} />
-    </>
+    </div>
   );
 }
-
 
 export default Analytics

@@ -9,7 +9,7 @@ const useLocationAnalytics = (handle) => {
       const response = await axios.get(
         `/api/analytics/views/location?handle=${handle}`
       );
-      return response.data;
+      return response;
     },
     enabled: !!handle,
     onError: () => {

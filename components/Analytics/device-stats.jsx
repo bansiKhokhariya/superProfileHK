@@ -2,6 +2,7 @@ import { PieChart, Tooltip, Pie, Cell } from 'recharts';
 import useMediaQuery from '@/hooks/use-media-query';
 
 export const DeviceStats = ({ analytics }) => {
+
   const COLORS = ['#0088FE', '#00C49F', ' #c84e89', '#FFBB28', '#FF8042'];
   const { isMobile } = useMediaQuery();
 

@@ -4,9 +4,10 @@ import { useState } from 'react';
 import Avatar from 'boring-avatars';
 
 export const LocationStats = ({ analytics }) => {
+
   const [showAll, setShowAll] = useState(false);
 
-  const displayedCountries = showAll ? analytics : analytics?.slice(0, 4);
+  const displayedCountries = showAll ? analytics : analytics?.data?.slice(0, 4);
 
   const handleShowMore = () => {
     setShowAll(true);

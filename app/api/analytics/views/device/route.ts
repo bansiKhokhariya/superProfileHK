@@ -1,59 +1,72 @@
 import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
 
-// export default async function handler(req, res) {
-//   if (req.method !== 'GET') {
-//     return res.status(405).end();
-//   }
+interface AnalyticsData {
+    timestamp: string;
+    action: string;
+    version: string;
+    session_id: string;
+    location: string;
+    referrer: string;
+    pathname: string;
+    href: string;
+    device: string;
+    browser: string;
+}
 
-//   try {
-//     const {handle} = req.query;
-//     const endpoint =
-//       'https://api.tinybird.co/v0/pipes/libre_device_tracking.json';
-
-//     if (!handle || typeof handle !== 'string') {
-//       return res.status(404).end();
-//     }
-
-//     const analytics = await axios.get(
-//       `${endpoint}?token=${process.env.DEVICE_ANALYTICS_TOKEN}&handle=/${handle}`
-//     );
-
-//     return res.status(200).json(analytics.data.data);
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).end();
-//   }
-// }
-
+interface DeviceVisits {
+    device: string;
+    visits: number;
+}
 
 export async function GET(req: NextRequest, res: NextResponse) {
-
-    console.log('in api device');
     try {
         const { searchParams } = new URL(req.url);
         const handle = searchParams.get('handle');
 
-
-        const endpoint = 'https://api.tinybird.co/v0/pipes/libre_device_tracking.json';
+        const endpoint = 'https://api.tinybird.co/v0/pipes/analytics_hits.json';
 
         if (!handle || typeof handle !== 'string') {
-            return NextResponse.json({
-                message: 'Handle type not valid'
-            }, { status: 404 });
+            return NextResponse.json(
+                {
+                    message: 'Handle type not valid',
+                },
+                { status: 404 }
+            );
         }
 
-        const analytics = await axios.get(
-            `${endpoint}?token=${process.env.DEVICE_ANALYTICS_TOKEN}&handle=/${handle}`
+        const response = await axios.get<{ data: AnalyticsData[] }>(
+            `${endpoint}?token=${process.env.ANALYTICS_TOKEN}`
         );
 
-        return NextResponse.json({
-            analytics
-        }, { status: 200 });
+        const analyticsData = response.data.data;
+
+        // Filter data for the specific handle
+        const filteredData = analyticsData.filter(
+            (entry) => entry.pathname === `/${handle}`
+        );
+
+        // Count visits by device
+        const deviceCounts: Record<string, number> = {};
+        filteredData.forEach((entry) => {
+            const device = entry.device;
+            if (deviceCounts[device]) {
+                deviceCounts[device]++;
+            } else {
+                deviceCounts[device] = 1;
+            }
+        });
+
+        // Convert to desired format
+        const deviceVisits: DeviceVisits[] = Object.entries(deviceCounts).map(
+            ([device, visits]) => ({ device, visits })
+        );
+        return NextResponse.json(deviceVisits, { status: 200 });
     } catch (error: any) {
         return NextResponse.json(
-            { message: "An error occurred", error: error.message },
+            { message: 'An error occurred', error: error.message },
             { status: 500 }
         );
     }
 }
+
