@@ -247,7 +247,7 @@ const Page = ({ params }) => {
             <Script defer
                 src="https://unpkg.com/@tinybirdco/flock.js"
                 data-host="https://api.tinybird.co"
-                data-token="p.eyJ1IjogImVkOTgwZGM3LTc3M2YtNDBkYy1hZmU5LTU0Y2VhNDMzYmFlYyIsICJpZCI6ICI3OGRkNmU1ZC01ZmNkLTQxNzctODYwNC00MWE4ZDg2MzY3YzUiLCAiaG9zdCI6ICJldV9zaGFyZWQifQ.4zM2j63lNeurkZla70fbLUcmQYSU-ye7vU2fJIn1Nv0"
+                data-token={process.env.NEXT_PUBLIC_DATA_TOKEN}
             />
             {/* ) : null} */}
             <div
